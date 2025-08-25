@@ -11,7 +11,7 @@ import { getImageData } from "~/lib";
 
 // Context Values
 interface CanvasContextValueType {
-  canvasRef: RefObject<HTMLCanvasElement>;
+  canvasRef: RefObject<HTMLCanvasElement | null>;
   ctxRef: RefObject<CanvasRenderingContext2D | null>;
   image: HTMLImageElement | null;
   imageData: ImageData | null;
