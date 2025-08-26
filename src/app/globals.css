@@ -1,5 +1,71 @@
 @import "tailwindcss";
 
+:root {
+  --input-range-thumb: var(--zinc-200);
+  --input-range-track: var(--zinc-200);
+}
+
 body {
   box-sizing: border-box;
+  scroll-behavior: smooth;
+  text-decoration-skip-ink: none;
+}
+
+input[type="color"] {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+/* Range Input Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--color-zinc-800);
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: none;
+  transition: scale 0.1s ease-in-out;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  scale: 1.2;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: var(--color-zinc-800);
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: none;
+  transition: all 0.1s ease-in-out;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  scale: 1.2;
 }

@@ -17,3 +17,7 @@ export function ToolContainer({
     </div>
   );
 }
+
+export function ToolLabel({ children }: { children: ReactNode }) {
+  return <label className="font-semibold uppercase">{children}</label>;
+}

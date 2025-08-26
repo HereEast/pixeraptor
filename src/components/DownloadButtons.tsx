@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button } from "~/components/Button";
+import { Button } from "~/components/ui/Button";
 
 interface DownloadButtonsProps {
   onDownloadPNG: () => void;
@@ -14,10 +14,10 @@ export const DownloadButtons = React.memo(function DownloadButtons({
   return (
     <div className="flex gap-2">
       <Button onClick={onDownloadPNG} className="h-20 flex-1">
-        Download PNG
+        Download .PNG
       </Button>
       <Button onClick={onDownloadSVG} className="h-20 flex-1">
-        Download SVG
+        Download .SVG
       </Button>
     </div>
   );

@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef } from "react";
 
-import { Button } from "~/components/Button";
+import { Button } from "~/components/ui/Button";
 import { useCanvasContext } from "~/hooks";
 
 export function UploadImage() {
@@ -26,7 +26,7 @@ export function UploadImage() {
         className="hidden"
       />
 
-      <Button onClick={() => fileInputRef.current?.click()}>
+      <Button onClick={() => fileInputRef.current?.click()} className="text-sm">
         Upload Image
       </Button>
     </div>

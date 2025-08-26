@@ -5,17 +5,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "~/utils";
 
 export const buttonVariants = cva(
-  "inline-flex h-10 w-fit items-center justify-center whitespace-nowrap px-5 pb-0.5 transition disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex h-10 w-fit items-center justify-center whitespace-nowrap px-5 pb-0.5 transition disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
   {
     variants: {
       variant: {
-        base: "bg-stone-900 text-stone-50 hover:bg-stone-950",
+        base: "bg-stone-800 text-stone-50 hover:bg-stone-950",
         secondary: "bg-stone-600/10 hover:bg-stone-600/25",
       },
       size: {
         default: "",
         icon: "size-10 shrink-0",
-        small: "h-8 w-fit text-[14px] px-3",
+        small: "h-8 w-fit text-sm px-3",
         large: "h-20 w-fit",
       },
     },

@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Header } from "~/components/Header";
 import { Footer } from "~/components/Footer";
 
-const jetBrainsMono = JetBrains_Mono({
+const jetBrainsMono = Roboto_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
 });
@@ -22,8 +22,11 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${jetBrainsMono.className} scroll-behavior-smooth`}>
-      <body className="antialiased">
+    <html
+      lang="en"
+      className={`${jetBrainsMono.className} scroll-behavior-smooth`}
+    >
+      <body className="bg-stone-100">
         <Header />
         <main className="flex grow flex-col p-5">{children}</main>
         <Footer />
