@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -28,6 +30,7 @@ export default function RootLayout({
         <Header />
         <main className="grow p-5">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
