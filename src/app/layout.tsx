@@ -5,16 +5,14 @@ import "./globals.css";
 
 import { Header } from "~/components/Header";
 import { Footer } from "~/components/Footer";
+import { getMetadata } from "~/lib";
 
 const jetBrainsMono = Roboto_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Pixeraptor",
-  description: "Pixelate your images with ease and edit pixels.",
-};
+export const metadata: Metadata = getMetadata();
 
 export default function RootLayout({
   children,

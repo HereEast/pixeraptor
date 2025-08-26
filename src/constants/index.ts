@@ -1,3 +1,9 @@
+export const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  (process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://pixeraptor.com");
+
 export const MIN_TILE_SIZE = 16;
 export const MAX_TILE_SIZE = 60;
 export const TILE_SIZE_STEP = 2;
