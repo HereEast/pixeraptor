@@ -1,6 +1,6 @@
 import { InputRange } from "./ui/InputRange";
 import { Button } from "./ui/Button";
-import { ToolLabel } from "./ToolContainer";
+import { ControlLabel } from "./Controls";
 
 import { MIN_COLOR_LIMIT, MAX_COLOR_LIMIT } from "~/constants";
 import { useSettingsContext } from "~/hooks/useSettingsContext";
@@ -11,7 +11,7 @@ export function ColorsRange() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
-        <ToolLabel>Colors [{colorLimit}]</ToolLabel>
+        <ControlLabel>Colors [{colorLimit}]</ControlLabel>
 
         <Button size="small" onClick={refreshColors} className="pb-px">
           Refresh

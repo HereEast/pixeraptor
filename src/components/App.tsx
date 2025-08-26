@@ -1,19 +1,15 @@
 "use client";
 
-import { ToolContainer } from "./ToolContainer";
-import { UploadImage } from "./UploadImage";
 import { Canvas } from "./Canvas";
-import { TileRange } from "./TileRange";
-import { ColorsRange } from "./ColorsRange";
-import { Colors } from "./Colors";
+import { UploadImage } from "./UploadImage";
 import { DownloadButtons } from "./DownloadButtons";
+import { Controls } from "./Controls";
 
 import { useCanvasContext, useSettingsContext } from "~/hooks";
 
 export function App() {
   const { image } = useCanvasContext();
-  const { tileAssignments, editedColors, replaceColor, download } =
-    useSettingsContext();
+  const { tileAssignments, download } = useSettingsContext();
 
   const isLoaded = image && tileAssignments.length > 0;
 
@@ -38,19 +34,7 @@ export function App() {
           )}
         </div>
 
-        {isLoaded && (
-          <div className="flex flex-col gap-3">
-            <ToolContainer>
-              <TileRange />
-            </ToolContainer>
-
-            <ToolContainer className="gap-6">
-              <ColorsRange />
-
-              <Colors colors={editedColors} handleChange={replaceColor} />
-            </ToolContainer>
-          </div>
-        )}
+        {isLoaded && <Controls />}
       </div>
     </section>
   );
