@@ -7,7 +7,7 @@ import {
   RefObject,
 } from "react";
 
-import { getImageData } from "~/lib";
+import { getImageData, IndexedDB } from "~/lib";
 
 // Context Values
 interface CanvasContextValueType {
@@ -46,14 +46,51 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
 
   // Image data
   useEffect(() => {
-    if (!canvasRef.current || !image) return;
+    async function handleImageData() {
+      // Restore data from indexedDB
+      const savedImageData = await IndexedDB.getImageData();
 
-    const result = getImageData(canvasRef.current, image);
+      if (savedImageData && !image) {
+        const imageUrl = URL.createObjectURL(savedImageData.imageBlob);
+        const restoredImage = new Image();
 
-    if (!result) return;
+        restoredImage.onload = () => {
+          setImage(restoredImage);
+          setImageData(savedImageData.imageData);
+          setFilename(savedImageData.filename);
+          URL.revokeObjectURL(imageUrl);
+        };
 
-    setImageData(result.imageData);
-  }, [image, canvasRef]);
+        restoredImage.src = imageUrl;
+        return;
+      }
+
+      // Get image data from canvas
+      if (!canvasRef.current || !image) return;
+
+      const result = getImageData(canvasRef.current, image);
+
+      if (!result) {
+        console.error("Failed to get image data.");
+        return;
+      }
+
+      setImageData(result.imageData);
+
+      // Save image data to indexedDB
+      canvasRef.current.toBlob(async (blob) => {
+        if (blob) {
+          await IndexedDB.saveImageData({
+            filename,
+            imageData: result.imageData,
+            imageBlob: blob,
+          });
+        }
+      });
+    }
+
+    handleImageData();
+  }, [image, canvasRef, filename]);
 
   // Handle file upload
   async function handleUpload(file: File) {
@@ -74,6 +111,9 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
           reject(new Error("Failed to load image"));
         };
       });
+
+      // Clear indexedDB
+      await IndexedDB.clearImageData();
 
       setImage(img);
       setFilename(file.name);
