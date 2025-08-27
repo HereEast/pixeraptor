@@ -5,8 +5,10 @@ import {
   createContext,
   useEffect,
   RefObject,
+  useCallback,
 } from "react";
 
+import { IndexedDB } from "~/db";
 import { getImageData } from "~/lib";
 
 // Context Values
@@ -33,6 +35,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [filename, setFilename] = useState("");
+  const [isRestored, setIsRestored] = useState(false);
 
   // Canvas context
   useEffect(() => {
@@ -44,20 +47,83 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     ctxRef.current = ctx;
   }, [canvasRef]);
 
-  // Image data
+  // Restore data from IndexedDB (runs only once)
   useEffect(() => {
-    if (!canvasRef.current || !image) return;
+    async function restoreFromIndexedDB() {
+      const savedImageData = await IndexedDB.getImageData();
 
-    const result = getImageData(canvasRef.current, image);
+      if (savedImageData) {
+        const imageUrl = URL.createObjectURL(savedImageData.imageBlob);
+        const restoredImage = new Image();
 
-    if (!result) return;
+        restoredImage.onload = () => {
+          setImage(restoredImage);
+          setImageData(savedImageData.imageData);
+          setFilename(savedImageData.filename);
+          setIsRestored(true);
 
-    setImageData(result.imageData);
-  }, [image, canvasRef]);
+          URL.revokeObjectURL(imageUrl);
+        };
 
+        restoredImage.onerror = () => {
+          console.error("Failed to load restored image");
+
+          URL.revokeObjectURL(imageUrl);
+          setIsRestored(true);
+        };
+
+        restoredImage.src = imageUrl;
+      } else {
+        setIsRestored(true);
+      }
+    }
+
+    restoreFromIndexedDB();
+  }, []);
+
+  // Runs when NEW image is uploaded
+  useEffect(() => {
+    if (!isRestored || !canvasRef.current || !image) return;
+
+    async function processImageData() {
+      const canvas = canvasRef.current;
+
+      if (!canvas || !image) return;
+
+      const result = getImageData(canvas, image);
+
+      if (!result) {
+        console.error("Failed to get image data.");
+        return;
+      }
+
+      setImageData(result.imageData);
+
+      // Save data to DB - runs for NEW images
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          try {
+            await IndexedDB.saveImageData({
+              filename,
+              imageData: result.imageData,
+              imageBlob: blob,
+            });
+          } catch (error) {
+            console.error("Failed to save image data:", error);
+          }
+        }
+      });
+    }
+
+    processImageData();
+  }, [image, filename, isRestored]);
+
+  //
   // Handle file upload
-  async function handleUpload(file: File) {
+  const handleUpload = useCallback(async (file: File) => {
     try {
+      await IndexedDB.clearImageData();
+
       const img = new Image();
       const url = URL.createObjectURL(file);
 
@@ -80,7 +146,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     } catch (error) {
       console.error("Upload failed:", error);
     }
-  }
+  }, []);
 
   return (
     <CanvasContext.Provider
