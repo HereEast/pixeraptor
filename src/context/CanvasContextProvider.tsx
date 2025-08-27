@@ -10,6 +10,7 @@ import {
 
 import { IndexedDB } from "~/db";
 import { getImageData } from "~/lib";
+import { uploadImage } from "~/lib/uploadImage";
 
 // Context Values
 interface CanvasContextValueType {
@@ -124,22 +125,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     try {
       await IndexedDB.clearImageData();
 
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-
-      img.src = url;
-
-      await new Promise<void>((resolve, reject) => {
-        img.onload = () => {
-          URL.revokeObjectURL(url);
-          resolve();
-        };
-
-        img.onerror = () => {
-          URL.revokeObjectURL(url);
-          reject(new Error("Failed to load image"));
-        };
-      });
+      const img = await uploadImage(file);
 
       setImage(img);
       setFilename(file.name);
