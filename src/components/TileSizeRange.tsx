@@ -1,4 +1,3 @@
-import { ControlLabel } from "./Controls";
 import { InputRange } from "./ui/InputRange";
 
 import { MIN_TILE_SIZE, MAX_TILE_SIZE, TILE_SIZE_STEP } from "~/constants";
@@ -9,7 +8,10 @@ export function TileSizeRange() {
 
   return (
     <div className="flex flex-col gap-3">
-      <ControlLabel>TILE [{tileSize}]</ControlLabel>
+      <div className="flex items-center gap-2 text-sm font-semibold uppercase">
+        <span>Tile</span>
+        <span>[{tileSize}]</span>
+      </div>
 
       <div className="flex items-center gap-4">
         <InputRange

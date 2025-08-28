@@ -3,7 +3,7 @@ export function Footer() {
 
   return (
     <footer className="px-5 py-4">
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex flex-col text-sm md:flex-row md:items-center md:justify-between">
         <div>
           <p>
             <span>© {currentYear} Pixeraptor. </span>

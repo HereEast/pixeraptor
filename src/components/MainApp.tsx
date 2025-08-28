@@ -10,46 +10,35 @@ import { useCanvasContext, useSettingsContext } from "~/hooks";
 
 export function MainApp() {
   const { image } = useCanvasContext();
-  const { tileAssignments, download } = useSettingsContext();
-
-  // const isLoaded = image && tileAssignments.length > 0;
+  const { download } = useSettingsContext();
 
   return (
-    <div className="w-full">
-      <UploadImage />
+    <div className="flex w-full flex-col gap-6 xl:flex-row">
+      <section className="flex w-full flex-col gap-2">
+        <UploadImage />
 
-      <div className="flex w-full gap-10">
-        {/* Col 1 */}
-        <div className="relative flex max-w-[400px] flex-col gap-6">
-          {!image && (
-            <div className="absolute inset-0 size-[400px] bg-zinc-200" />
-          )}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,400px)_minmax(0,440px)]">
+          <div className="flex flex-col gap-6">
+            <Canvas />
 
-          <Canvas />
-
-          {image && (
-            <DownloadButtons
-              onDownloadPNG={download.savePNG}
-              onDownloadSVG={download.saveSVG}
-            />
-          )}
-        </div>
-
-        {/* Col 2 */}
-        {image && (
-          <div className="w-[440px]">
-            <Controls />
+            {image && (
+              <DownloadButtons
+                onDownloadPNG={download.savePNG}
+                onDownloadSVG={download.saveSVG}
+              />
+            )}
           </div>
-        )}
 
-        {/* Col 3 */}
-        <div className="ml-auto flex max-w-[400px]">
-          <About>
-            Transform your image into pixel art with Pixeraptor. Customize tile
-            sizes, edit colors, and export as PNG or SVG.
-          </About>
+          {image && <Controls />}
         </div>
-      </div>
+      </section>
+
+      <section className="flex max-w-[400px] pt-10 pr-4">
+        <About>
+          Transform your image into pixel art with Pixeraptor. Customize tile
+          sizes, edit colors, and export as PNG or SVG.
+        </About>
+      </section>
     </div>
   );
 }
