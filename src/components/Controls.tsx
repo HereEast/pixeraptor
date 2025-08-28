@@ -11,7 +11,7 @@ export function Controls() {
   const { editedColors, replaceColor } = useSettingsContext();
 
   return (
-    <div className="flex w-full flex-col gap-3">
+    <div className="flex w-full flex-col gap-2">
       <ControlContainer>
         <TileSizeRange />
       </ControlContainer>
@@ -39,8 +39,4 @@ export function ControlContainer({
       {children}
     </div>
   );
-}
-
-export function ControlLabel({ children }: { children: ReactNode }) {
-  return <label className="text-sm font-semibold uppercase">{children}</label>;
 }

@@ -39,7 +39,7 @@ export function ColorPicker({ color, index, handleChange }: ColorPickerProps) {
   }
 
   return (
-    <div className="relative mb-2 size-8">
+    <div className="relative size-7">
       <input
         type="color"
         value={color}

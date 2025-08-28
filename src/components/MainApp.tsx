@@ -15,41 +15,36 @@ export function MainApp() {
   // const isLoaded = image && tileAssignments.length > 0;
 
   return (
-    <div className="w-full">
-      <UploadImage />
+    <div className="flex w-full gap-6">
+      <section className="flex w-full flex-col gap-2">
+        <UploadImage />
 
-      <div className="flex w-full gap-10">
-        {/* Col 1 */}
-        <div className="relative flex max-w-[400px] flex-col gap-6">
-          {!image && (
-            <div className="absolute inset-0 size-[400px] bg-zinc-200" />
-          )}
+        <div className="flex gap-6">
+          <div className="relative flex max-w-[400px] flex-col gap-6">
+            <Canvas />
 
-          <Canvas />
+            {image && (
+              <DownloadButtons
+                onDownloadPNG={download.savePNG}
+                onDownloadSVG={download.saveSVG}
+              />
+            )}
+          </div>
 
           {image && (
-            <DownloadButtons
-              onDownloadPNG={download.savePNG}
-              onDownloadSVG={download.saveSVG}
-            />
+            <div className="w-[440px]">
+              <Controls />
+            </div>
           )}
         </div>
+      </section>
 
-        {/* Col 2 */}
-        {image && (
-          <div className="w-[440px]">
-            <Controls />
-          </div>
-        )}
-
-        {/* Col 3 */}
-        <div className="ml-auto flex max-w-[400px]">
-          <About>
-            Transform your image into pixel art with Pixeraptor. Customize tile
-            sizes, edit colors, and export as PNG or SVG.
-          </About>
-        </div>
-      </div>
+      <section className="flex max-w-[400px] pt-10 pr-4">
+        <About>
+          Transform your image into pixel art with Pixeraptor. Customize tile
+          sizes, edit colors, and export as PNG or SVG.
+        </About>
+      </section>
     </div>
   );
 }

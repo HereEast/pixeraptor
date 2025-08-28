@@ -7,8 +7,8 @@ export const FEATURES = [
   "Upload .PNG/JPG (Max 2MB)",
   "Adjust tile size",
   "Adjust color limit",
-  "Refresh palette → 'Refresh'",
-  "Edit colors → Click on the color swatch → Update",
+  `Refresh palette → "RE"`,
+  "Edit colors → Click on the color swatch → Select new color",
   "Download .PNG/SVG (800x800)",
 ];
 

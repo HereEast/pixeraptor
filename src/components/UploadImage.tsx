@@ -28,7 +28,7 @@ export function UploadImage() {
   }
 
   return (
-    <div className="mb-2">
+    <div>
       <input
         type="file"
         accept=".png, .jpg, .jpeg"

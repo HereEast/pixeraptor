@@ -4,7 +4,7 @@ import { useCanvasContext, useSettingsContext } from "~/hooks";
 import { drawCanvas } from "~/lib";
 
 export function Canvas() {
-  const { canvasRef, imageData, ctxRef } = useCanvasContext();
+  const { canvasRef, imageData, ctxRef, image } = useCanvasContext();
   const { tileAssignments, editedColors, tileSize } = useSettingsContext();
 
   useLayoutEffect(() => {
@@ -20,7 +20,9 @@ export function Canvas() {
   }, [editedColors, tileAssignments, tileSize, imageData, ctxRef]);
 
   return (
-    <div>
+    <div className="relative">
+      {!image && <div className="absolute inset-0 size-[400px] bg-zinc-200" />}
+
       <canvas
         ref={canvasRef}
         width={400}
