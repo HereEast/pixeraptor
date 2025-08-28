@@ -25,10 +25,9 @@ export function Canvas() {
 
       <canvas
         ref={canvasRef}
-        width={400}
-        height={400}
+        width={800}
+        height={800}
         className="h-auto max-w-full"
-        style={{ maxHeight: "400px", maxWidth: "400px" }}
       />
     </div>
   );

@@ -10,17 +10,15 @@ import { useCanvasContext, useSettingsContext } from "~/hooks";
 
 export function MainApp() {
   const { image } = useCanvasContext();
-  const { tileAssignments, download } = useSettingsContext();
-
-  // const isLoaded = image && tileAssignments.length > 0;
+  const { download } = useSettingsContext();
 
   return (
-    <div className="flex w-full gap-6">
+    <div className="flex w-full flex-col gap-6 xl:flex-row">
       <section className="flex w-full flex-col gap-2">
         <UploadImage />
 
-        <div className="flex gap-6">
-          <div className="relative flex max-w-[400px] flex-col gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,400px)_minmax(0,440px)]">
+          <div className="flex flex-col gap-6">
             <Canvas />
 
             {image && (
@@ -31,11 +29,7 @@ export function MainApp() {
             )}
           </div>
 
-          {image && (
-            <div className="w-[440px]">
-              <Controls />
-            </div>
-          )}
+          {image && <Controls />}
         </div>
       </section>
 

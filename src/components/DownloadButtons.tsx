@@ -12,11 +12,11 @@ export const DownloadButtons = React.memo(function DownloadButtons({
   onDownloadSVG,
 }: DownloadButtonsProps) {
   return (
-    <div className="flex gap-2">
-      <Button onClick={onDownloadPNG} className="h-20 flex-1">
+    <div className="flex flex-col gap-2 sm:flex-row">
+      <Button onClick={onDownloadPNG} className="h-20 w-full">
         Download .PNG
       </Button>
-      <Button onClick={onDownloadSVG} className="h-20 flex-1">
+      <Button onClick={onDownloadSVG} className="h-20 w-full">
         Download .SVG
       </Button>
     </div>
