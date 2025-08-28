@@ -11,7 +11,7 @@ export function Controls() {
   const { editedColors, replaceColor } = useSettingsContext();
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       <ControlContainer>
         <TileSizeRange />
       </ControlContainer>

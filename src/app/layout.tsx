@@ -26,7 +26,10 @@ export default function RootLayout({
       lang="en"
       className={`${jetBrainsMono.className} scroll-behavior-smooth`}
     >
-      <body className="flex min-h-screen flex-col bg-stone-100">
+      <body
+        className="flex min-h-screen flex-col bg-stone-100"
+        suppressHydrationWarning
+      >
         <Header />
         <main className="grow p-5">{children}</main>
         <Footer />
