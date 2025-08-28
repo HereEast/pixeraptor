@@ -5,7 +5,7 @@ import { BASE_URL } from "~/constants";
 const SEO_DATA = {
   title: "Pixeraptor - Free Online Pixel Art Generator",
   description:
-    "Transform any image into pixel art with Pixeraptor. Customize tile sizes, edit colors, and export as PNG or SVG. Free online pixel art generator tool.",
+    "Transform any image into pixel art with Pixeraptor. Customize tile sizes, edit colors, and export as PNG or SVG.",
   url: BASE_URL,
   imageUrl: `${BASE_URL}/og-image.png`,
   keywords: [

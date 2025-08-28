@@ -16,3 +16,12 @@ export const CANVAS_HEIGHT = 800;
 
 export const DEFAULT_COLOR_LIMIT = 5;
 export const DEFAULT_TILE_SIZE = 42;
+
+export const ROUTE = {
+  HOME: "/",
+  ABOUT: "/about",
+};
+
+export const CONTACT = {
+  EMAIL: "heypeoplework@gmail.com",
+};

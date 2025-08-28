@@ -9,8 +9,7 @@ import {
 } from "react";
 
 import { IndexedDB } from "~/db";
-import { getImageData } from "~/lib";
-import { uploadImage } from "~/lib/uploadImage";
+import { getImageData, uploadImage } from "~/lib";
 
 // Context Values
 interface CanvasContextValueType {
