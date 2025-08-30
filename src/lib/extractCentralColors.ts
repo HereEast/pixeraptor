@@ -10,16 +10,13 @@ export function extractCentralColors(
 ): string[] {
   const imageColors = getImageColors(imageData); // [[r, g, b]]
 
-  // Updated on every iteration > [[r, g, b]]
-  const centroids = getInitialCentroids(imageColors, limit);
-
-  // Updated on every iteration > [0, 1, 0, ...]
+  // Updated on every iteration > [[r, g, b]], [0, 1, 0, ...]
+  let centroids = getInitialCentroids(imageColors, limit);
   let assignments = new Array<number>(imageColors.length).fill(0);
 
   for (let iteration = 0; iteration < ITERATIONS; iteration++) {
-    assignments = assignColorsToNearestCentroid(imageColors, centroids);
-
-    updateCentroids(imageColors, centroids, assignments);
+    assignments = getCentroidAssignments(imageColors, centroids);
+    centroids = getUpdatedCentroids(imageColors, centroids, assignments);
   }
 
   const hexColors = centroids.map(([r, g, b]) => rgbToHex([r, g, b]));
@@ -28,7 +25,7 @@ export function extractCentralColors(
 }
 
 // Which centroid is the closest to each color (Clustering)
-function assignColorsToNearestCentroid(
+function getCentroidAssignments(
   imageColors: RGBColor[],
   centroids: RGBColor[],
 ): number[] {
@@ -47,13 +44,13 @@ function assignColorsToNearestCentroid(
 }
 
 // Update centroids
-function updateCentroids(
+function getUpdatedCentroids(
   imageColors: RGBColor[],
   centroids: RGBColor[],
   assignments: number[],
 ) {
-  const centroidData = centroids.map(() => ({
-    sum: [0, 0, 0] as RGBColor,
+  const data = centroids.map(() => ({
+    avgColor: [0, 0, 0] as RGBColor,
     count: 0,
   }));
 
@@ -62,28 +59,33 @@ function updateCentroids(
     const centroidIndex = assignments[i];
     const color = imageColors[i];
 
-    centroidData[centroidIndex].sum[0] += color[0];
-    centroidData[centroidIndex].sum[1] += color[1];
-    centroidData[centroidIndex].sum[2] += color[2];
+    data[centroidIndex].avgColor[0] += color[0];
+    data[centroidIndex].avgColor[1] += color[1];
+    data[centroidIndex].avgColor[2] += color[2];
 
-    centroidData[centroidIndex].count++;
+    data[centroidIndex].count++;
   }
 
   // Update centroid with average of assigned colors
+  const updatedCentroids: RGBColor[] = [];
+
   for (let i = 0; i < centroids.length; i++) {
-    const count = centroidData[i].count;
+    const count = data[i].count;
 
     if (count > 0) {
-      // Update centroid to average of assigned colors
-      centroids[i][0] = centroidData[i].sum[0] / count;
-      centroids[i][1] = centroidData[i].sum[1] / count;
-      centroids[i][2] = centroidData[i].sum[2] / count;
+      const r = data[i].avgColor[0] / count;
+      const g = data[i].avgColor[1] / count;
+      const b = data[i].avgColor[2] / count;
+
+      updatedCentroids.push([r, g, b]);
     } else {
-      // Re-seed lonely centroid with random color
       const randomColor = getRandomColor(imageColors);
-      centroids[i] = randomColor;
+
+      updatedCentroids.push(randomColor);
     }
   }
+
+  return updatedCentroids;
 }
 
 // Get initial centroids
