@@ -90,14 +90,14 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
 
       if (!canvas || !image) return;
 
-      const imageData = getImageData(canvas, image);
+      const data = getImageData(canvas, image);
 
-      if (!imageData) {
+      if (!data) {
         console.error("Failed to get image data.");
         return;
       }
 
-      setImageData(imageData);
+      setImageData(data);
 
       // SAVE DATA TO DB
       canvas.toBlob(async (blob) => {
@@ -105,7 +105,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
           try {
             await IndexedDB.saveImageData({
               filename,
-              imageData,
+              imageData: data,
               imageBlob: blob,
             });
           } catch (error) {
