@@ -10,10 +10,11 @@ export function extractCentralColors(
 ): string[] {
   const imageColors = getImageColors(imageData); // [[r, g, b]]
 
-  // Updated on every iteration > [[r, g, b]], [0, 1, 0, ...]
-  let centroids = getInitialCentroids(imageColors, limit);
-  let assignments = new Array<number>(imageColors.length).fill(0);
+  let centroids: RGBColor[] = getInitialCentroids(imageColors, limit);
+  let assignments: number[] = [];
 
+  // Clustering (K-Means)
+  // Updated on every iteration > [[r, g, b]], [0, 1, 0, ...]
   for (let iteration = 0; iteration < ITERATIONS; iteration++) {
     assignments = getCentroidAssignments(imageColors, centroids);
     centroids = getUpdatedCentroids(imageColors, centroids, assignments);
@@ -24,12 +25,12 @@ export function extractCentralColors(
   return hexColors;
 }
 
-// Which centroid is the closest to each color (Clustering)
+// Which centroid is the closest to each color
 function getCentroidAssignments(
   imageColors: RGBColor[],
   centroids: RGBColor[],
-): number[] {
-  const centroidIndexes = new Array<number>(imageColors.length);
+) {
+  const centroidAssignments: number[] = [];
 
   for (let i = 0; i < imageColors.length; i++) {
     const bestCentroidIndex = getClosestCentroidIndex(
@@ -37,10 +38,10 @@ function getCentroidAssignments(
       centroids,
     );
 
-    centroidIndexes[i] = bestCentroidIndex;
+    centroidAssignments.push(bestCentroidIndex);
   }
 
-  return centroidIndexes;
+  return centroidAssignments;
 }
 
 // Update centroids

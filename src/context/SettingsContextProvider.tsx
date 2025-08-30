@@ -1,7 +1,7 @@
 import { ReactNode, useState, createContext, useLayoutEffect } from "react";
 
 import { DEFAULT_COLOR_LIMIT, DEFAULT_TILE_SIZE } from "~/constants";
-import { extractCentralColors, calculateTileAssignments } from "~/lib";
+import { extractCentralColors, getTileAssignments } from "~/lib";
 import { useCanvasContext } from "~/hooks";
 
 // Context Values
@@ -58,7 +58,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   function updateAssignments(centralColors: string[]) {
     if (!imageData) return;
 
-    const newAssignments = calculateTileAssignments(
+    const newAssignments = getTileAssignments(
       imageData,
       centralColors,
       tileSize,

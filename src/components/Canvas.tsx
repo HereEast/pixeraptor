@@ -7,17 +7,19 @@ export function Canvas() {
   const { canvasRef, imageData, ctxRef, image } = useCanvasContext();
   const { tileAssignments, editedColors, tileSize } = useSettingsContext();
 
+  const ctx = ctxRef.current;
+
   useLayoutEffect(() => {
-    if (!imageData || !tileAssignments.length || !ctxRef.current) return;
+    if (!imageData || !tileAssignments.length || !ctx) return;
 
     drawCanvas({
-      ctx: ctxRef.current,
+      ctx,
       imageData,
-      assignments: tileAssignments,
+      tileAssignments,
       colors: editedColors,
       tileSize,
     });
-  }, [editedColors, tileAssignments, tileSize, imageData, ctxRef]);
+  }, [editedColors, tileAssignments, tileSize, imageData, ctx]);
 
   return (
     <div className="relative">

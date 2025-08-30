@@ -1,8 +1,8 @@
 import { RGBColor } from "~/types";
-import { getClosestCentroidIndex } from "./";
+import { getClosestCentroidIndex } from ".";
 
 // Recompute tile assignments when palette or tile size changes
-export function calculateTileAssignments(
+export function getTileAssignments(
   imageData: ImageData,
   centralColors: string[],
   tileSize: number,

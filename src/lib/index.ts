@@ -1,4 +1,4 @@
-export * from "./calculateTileAssignments";
+export * from "./getTileAssignments";
 export * from "./download";
 export * from "./drawCanvas";
 export * from "./extractCentralColors";
