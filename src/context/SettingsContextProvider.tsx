@@ -1,10 +1,8 @@
 import { ReactNode, useState, createContext, useLayoutEffect } from "react";
 
-import { extractColors } from "../lib/extractColors";
-import { calculateTileAssignments } from "../lib/calculateTileAssignments";
 import { DEFAULT_COLOR_LIMIT, DEFAULT_TILE_SIZE } from "~/constants";
+import { extractCentralColors, calculateTileAssignments } from "~/lib";
 import { useCanvasContext } from "~/hooks";
-import { downloadPNG, downloadSVG } from "~/lib";
 
 // Context Values
 interface SettingsContextValueType {
@@ -16,10 +14,6 @@ interface SettingsContextValueType {
   setColorLimit: (colorLimit: number) => void;
   replaceColor: (idx: number, value: string) => void;
   refreshColors: () => void;
-  download: {
-    savePNG: () => void;
-    saveSVG: () => void;
-  };
 }
 
 export const SettingsContext = createContext<SettingsContextValueType | null>(
@@ -32,7 +26,7 @@ interface ColorsContextType {
 }
 
 export function SettingsContextProvider({ children }: ColorsContextType) {
-  const { imageData, canvasRef, filename } = useCanvasContext();
+  const { imageData } = useCanvasContext();
 
   const [tileSize, setTileSize] = useState(DEFAULT_TILE_SIZE);
   const [colorLimit, setColorLimit] = useState(DEFAULT_COLOR_LIMIT);
@@ -40,7 +34,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   const [generatedColors, setGeneratedColors] = useState<string[]>([]);
   const [tileAssignments, setTileAssignments] = useState<number[]>([]);
 
-  // Tile size change
+  // TILE SIZE CHANGE
   useLayoutEffect(() => {
     if (!imageData || generatedColors.length === 0) return;
 
@@ -48,11 +42,11 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tileSize, generatedColors]);
 
-  // Color limit change
+  // COLOR LIMIT CHANGE
   useLayoutEffect(() => {
     if (!imageData) return;
 
-    const initialColors = extractColors(imageData, colorLimit);
+    const initialColors = extractCentralColors(imageData, colorLimit);
 
     setEditedColors(initialColors);
     setGeneratedColors(initialColors);
@@ -60,56 +54,37 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorLimit, imageData]);
 
-  // Update assignments
-  function updateAssignments(colors: string[]) {
+  // UPDATE ASSIGNMENTS
+  function updateAssignments(centralColors: string[]) {
     if (!imageData) return;
 
     const newAssignments = calculateTileAssignments(
       imageData,
-      colors,
+      centralColors,
       tileSize,
-    );
+    ); // [0, 1, 0, ...] > Number of tiles
 
     setTileAssignments(newAssignments);
   }
 
-  // Refresh colors
+  // REFRESH COLORS
   function refreshColors() {
     if (!imageData) return;
 
-    const newColors = extractColors(imageData, colorLimit);
+    const newColors = extractCentralColors(imageData, colorLimit);
 
     setEditedColors(newColors);
     setGeneratedColors(newColors);
     updateAssignments(newColors);
   }
 
-  // Replace color
+  // REPLACE COLOR
   function replaceColor(idx: number, value: string) {
     setEditedColors((prev) => {
       const next = [...prev];
       next[idx] = value;
       return next;
     });
-  }
-
-  // Download
-  function savePNG() {
-    if (canvasRef.current) {
-      downloadPNG(canvasRef.current, filename);
-    }
-  }
-
-  function saveSVG() {
-    if (canvasRef.current && imageData && tileAssignments.length > 0) {
-      downloadSVG({
-        tileSize,
-        filename,
-        colors: editedColors,
-        imageData,
-        assignments: tileAssignments,
-      });
-    }
   }
 
   return (
@@ -123,10 +98,6 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
         setColorLimit,
         replaceColor,
         refreshColors,
-        download: {
-          savePNG,
-          saveSVG,
-        },
       }}
     >
       {children}

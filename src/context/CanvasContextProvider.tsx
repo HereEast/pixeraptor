@@ -37,7 +37,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   const [filename, setFilename] = useState("");
   const [isRestored, setIsRestored] = useState(false);
 
-  // Canvas context
+  // CANVAS
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -47,7 +47,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     ctxRef.current = ctx;
   }, [canvasRef]);
 
-  // Restore data from IndexedDB (runs only once)
+  // RESTORE DATA FROM DB
   useEffect(() => {
     async function restoreFromIndexedDB() {
       const savedImageData = await IndexedDB.getImageData();
@@ -81,7 +81,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     restoreFromIndexedDB();
   }, []);
 
-  // Runs when NEW image is uploaded
+  // ON IMAGE LOAD
   useEffect(() => {
     if (!isRestored || !canvasRef.current || !image) return;
 
@@ -90,22 +90,22 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
 
       if (!canvas || !image) return;
 
-      const result = getImageData(canvas, image);
+      const imageData = getImageData(canvas, image);
 
-      if (!result) {
+      if (!imageData) {
         console.error("Failed to get image data.");
         return;
       }
 
-      setImageData(result.imageData);
+      setImageData(imageData);
 
-      // Save data to DB - runs for NEW images
+      // SAVE DATA TO DB
       canvas.toBlob(async (blob) => {
         if (blob) {
           try {
             await IndexedDB.saveImageData({
               filename,
-              imageData: result.imageData,
+              imageData,
               imageBlob: blob,
             });
           } catch (error) {
@@ -118,8 +118,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     processImageData();
   }, [image, filename, isRestored]);
 
-  //
-  // Handle file upload
+  // UPLOAD IMAGE
   const handleUpload = useCallback(async (file: File) => {
     try {
       await IndexedDB.clearImageData();
