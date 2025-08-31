@@ -1,22 +1,15 @@
 import { useState } from "react";
 
+import { useSettingsContext } from "~/hooks";
 import { cn } from "~/utils";
 
-interface ColorsProps {
-  colors: string[];
-  handleChange: (index: number, color: string) => void;
-}
+export function Colors() {
+  const { editedColors } = useSettingsContext();
 
-export function Colors({ colors, handleChange }: ColorsProps) {
   return (
     <div className="flex flex-wrap gap-1">
-      {colors.map((color, index) => (
-        <ColorPicker
-          key={`color-${index}`}
-          color={color}
-          index={index}
-          handleChange={handleChange}
-        />
+      {editedColors.map((color, index) => (
+        <ColorPicker key={`color-${index}`} color={color} index={index} />
       ))}
     </div>
   );
@@ -26,16 +19,18 @@ export function Colors({ colors, handleChange }: ColorsProps) {
 interface ColorPickerProps {
   color: string;
   index: number;
-  handleChange: (index: number, color: string) => void;
 }
 
-export function ColorPicker({ color, index, handleChange }: ColorPickerProps) {
+export function ColorPicker({ color, index }: ColorPickerProps) {
+  const { replaceColor } = useSettingsContext();
+
   const [isFocused, setIsFocused] = useState(false);
 
+  // Update color
   function handleColorChange(newColor: string) {
     if (!newColor) return;
 
-    handleChange(index, newColor);
+    replaceColor(index, newColor);
   }
 
   return (
@@ -46,7 +41,11 @@ export function ColorPicker({ color, index, handleChange }: ColorPickerProps) {
         onChange={(e) => handleColorChange(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className={cn(isFocused ? "scale-110" : "scale-100", "transition")}
+        className={cn(
+          isFocused && "scale-110",
+          !isFocused && "hover:scale-110",
+          "transition",
+        )}
         style={{
           backgroundColor: color,
         }}

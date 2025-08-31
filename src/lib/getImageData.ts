@@ -24,7 +24,7 @@ export function getImageData(canvas: HTMLCanvasElement, img: HTMLImageElement) {
 
   const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  return { ctx, imageData };
+  return imageData;
 }
 
 // Calculate cropped image params

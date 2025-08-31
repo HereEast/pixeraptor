@@ -1,30 +1,33 @@
-import { getColorDistance, hexToRgb } from "~/utils";
 import { RGBColor } from "~/types";
+import { getClosestCentroidIndex } from ".";
 
 // Recompute tile assignments when palette or tile size changes
-export function calculateTileAssignments(
+export function getTileAssignments(
   imageData: ImageData,
-  colors: string[],
+  centralColors: string[],
   tileSize: number,
 ) {
   const cols = Math.ceil(imageData.width / tileSize);
   const rows = Math.ceil(imageData.height / tileSize);
 
-  const newAssignments: number[] = new Array(cols * rows).fill(0);
-
-  let idx = 0;
+  // [0, 1, 0, ...] > Number of tiles
+  const newAssignments: number[] = [];
 
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      const avg = getAverageTileColor({
+      const averageTileColor = getAverageTileColor({
         imageData,
         x: x * tileSize,
         y: y * tileSize,
-        size: tileSize,
+        tileSize,
       });
 
-      const closestIndex = getClosestColorIndex(avg, colors);
-      newAssignments[idx++] = closestIndex;
+      const closestIndex = getClosestCentroidIndex(
+        averageTileColor,
+        centralColors,
+      );
+
+      newAssignments.push(closestIndex);
     }
   }
 
@@ -36,14 +39,14 @@ interface Props {
   imageData: ImageData;
   x: number;
   y: number;
-  size: number;
+  tileSize: number;
 }
 
 export function getAverageTileColor({
   imageData,
   x,
   y,
-  size,
+  tileSize,
 }: Props): RGBColor {
   const { width, height, data } = imageData;
 
@@ -52,9 +55,10 @@ export function getAverageTileColor({
   let b = 0;
   let count = 0;
 
-  const xEnd = Math.min(x + size, width);
-  const yEnd = Math.min(y + size, height);
+  const xEnd = Math.min(x + tileSize, width);
+  const yEnd = Math.min(y + tileSize, height);
 
+  // Goes through each pixel in the tile
   for (let yStart = y; yStart < yEnd; yStart++) {
     for (let xStart = x; xStart < xEnd; xStart++) {
       const pixelIndex = (yStart * width + xStart) * 4;
@@ -77,25 +81,4 @@ export function getAverageTileColor({
   const avgB = b / count;
 
   return [avgR, avgG, avgB];
-}
-
-// Get closest color index
-export function getClosestColorIndex(
-  color: RGBColor,
-  leadColors: string[],
-): number {
-  let bestIndex = 0;
-  let minDistance = Infinity;
-
-  for (let i = 0; i < leadColors.length; i++) {
-    const leadRgb = hexToRgb(leadColors[i]);
-    const distance = getColorDistance(color, leadRgb);
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      bestIndex = i;
-    }
-  }
-
-  return bestIndex;
 }

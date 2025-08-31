@@ -1,23 +1,7 @@
-import { useLayoutEffect } from "react";
-
-import { useCanvasContext, useSettingsContext } from "~/hooks";
-import { drawCanvas } from "~/lib";
+import { useCanvasContext } from "~/hooks";
 
 export function Canvas() {
-  const { canvasRef, imageData, ctxRef, image } = useCanvasContext();
-  const { tileAssignments, editedColors, tileSize } = useSettingsContext();
-
-  useLayoutEffect(() => {
-    if (!imageData || !tileAssignments.length || !ctxRef.current) return;
-
-    drawCanvas({
-      ctx: ctxRef.current,
-      imageData,
-      assignments: tileAssignments,
-      colors: editedColors,
-      tileSize,
-    });
-  }, [editedColors, tileAssignments, tileSize, imageData, ctxRef]);
+  const { canvasRef, image } = useCanvasContext();
 
   return (
     <div className="relative">

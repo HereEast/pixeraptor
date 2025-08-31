@@ -6,11 +6,10 @@ import { UploadImage } from "./UploadImage";
 import { DownloadButtons } from "./DownloadButtons";
 import { About } from "./About";
 
-import { useCanvasContext, useSettingsContext } from "~/hooks";
+import { useCanvasContext } from "~/hooks";
 
 export function MainApp() {
   const { image } = useCanvasContext();
-  const { download } = useSettingsContext();
 
   return (
     <div className="flex w-full flex-col gap-6 xl:flex-row">
@@ -21,12 +20,7 @@ export function MainApp() {
           <div className="flex flex-col gap-6">
             <Canvas />
 
-            {image && (
-              <DownloadButtons
-                onDownloadPNG={download.savePNG}
-                onDownloadSVG={download.saveSVG}
-              />
-            )}
+            {image && <DownloadButtons />}
           </div>
 
           {image && <Controls />}
