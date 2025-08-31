@@ -35,17 +35,17 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   const [tileAssignments, setTileAssignments] = useState<number[]>([]);
 
   //
-  // On Tile Size Change
+  // ON TILE SIZE CHANGE
   //
   useLayoutEffect(() => {
     if (!imageData || generatedColors.length === 0) return;
 
-    updateTileAssignments(generatedColors);
+    assignColorIndexToTiles(generatedColors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tileSize, generatedColors]);
 
   //
-  // On Color Limit Change
+  // ON COLOR LIMIT CHANGE
   //
   useLayoutEffect(() => {
     if (!imageData) return;
@@ -54,12 +54,12 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
 
     setEditedColors(initialColors);
     setGeneratedColors(initialColors);
-    updateTileAssignments(initialColors);
+    assignColorIndexToTiles(initialColors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorLimit, imageData]);
 
   //
-  // Draw Canvas
+  // ON DRAW CANVAS
   //
   useLayoutEffect(() => {
     if (!imageData || !tileAssignments.length || !ctxRef.current) return;
@@ -78,7 +78,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   ////////////////////////////////
 
   // Update Tile Assignments: [0, 1, 0, ...] > Number of tiles
-  function updateTileAssignments(centralColors: string[]) {
+  function assignColorIndexToTiles(centralColors: string[]) {
     if (!imageData) return;
 
     const newAssignments = getTileAssignments(
@@ -98,7 +98,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
 
     setEditedColors(newColors);
     setGeneratedColors(newColors);
-    updateTileAssignments(newColors);
+    assignColorIndexToTiles(newColors);
   }
 
   // Replace Color
