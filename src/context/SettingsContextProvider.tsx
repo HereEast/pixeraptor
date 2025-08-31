@@ -38,7 +38,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   useLayoutEffect(() => {
     if (!imageData || generatedColors.length === 0) return;
 
-    updateAssignments(generatedColors);
+    updateTileAssignments(generatedColors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tileSize, generatedColors]);
 
@@ -50,12 +50,12 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
 
     setEditedColors(initialColors);
     setGeneratedColors(initialColors);
-    updateAssignments(initialColors);
+    updateTileAssignments(initialColors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorLimit, imageData]);
 
   // UPDATE ASSIGNMENTS
-  function updateAssignments(centralColors: string[]) {
+  function updateTileAssignments(centralColors: string[]) {
     if (!imageData) return;
 
     const newAssignments = getTileAssignments(
@@ -75,15 +75,15 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
 
     setEditedColors(newColors);
     setGeneratedColors(newColors);
-    updateAssignments(newColors);
+    updateTileAssignments(newColors);
   }
 
   // REPLACE COLOR
   function replaceColor(idx: number, value: string) {
     setEditedColors((prev) => {
-      const next = [...prev];
-      next[idx] = value;
-      return next;
+      const colors = [...prev];
+      colors[idx] = value;
+      return colors;
     });
   }
 

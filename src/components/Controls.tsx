@@ -4,12 +4,9 @@ import { TileSizeRange } from "./TileSizeRange";
 import { ColorsRange } from "./ColorsRange";
 import { Colors } from "./Colors";
 
-import { useSettingsContext } from "~/hooks";
 import { cn } from "~/utils";
 
 export function Controls() {
-  const { editedColors, replaceColor } = useSettingsContext();
-
   return (
     <div className="flex w-full flex-col gap-2">
       <ControlContainer>
@@ -18,7 +15,7 @@ export function Controls() {
 
       <ControlContainer className="gap-6">
         <ColorsRange />
-        <Colors colors={editedColors} handleChange={replaceColor} />
+        <Colors />
       </ControlContainer>
     </div>
   );
