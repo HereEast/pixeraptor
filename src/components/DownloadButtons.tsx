@@ -23,7 +23,7 @@ export function DownloadButtons() {
         filename,
         colors: editedColors,
         imageData,
-        assignments: tileAssignments,
+        tileAssignments,
       });
     }
   }

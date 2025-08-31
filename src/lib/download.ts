@@ -3,27 +3,23 @@ import { Context } from "svgcanvas";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "~/constants";
 import { drawCanvas } from "~/lib";
 
-interface DownloadSVGProps {
+interface Props {
   tileSize: number;
-  filename: string;
+  filename?: string;
   colors: string[];
   imageData: ImageData;
-  assignments: number[];
+  tileAssignments: number[];
 }
 
 // Download SVG
-export function downloadSVG({
-  tileSize,
-  filename,
-  colors,
-  imageData,
-  assignments,
-}: DownloadSVGProps) {
+export function downloadSVG(props: Props) {
+  const { tileSize, colors, imageData, tileAssignments, filename } = props;
+
   const svg = generateSVG({
     tileSize,
     colors,
     imageData,
-    assignments,
+    tileAssignments,
   });
 
   if (!svg) return;
@@ -43,22 +39,18 @@ export function downloadPNG(canvas: HTMLCanvasElement, filename: string) {
 }
 
 // Generate SVG
-interface GenerateSVGProps {
-  tileSize: number;
-  colors: string[];
-  imageData: ImageData;
-  assignments: number[];
-}
+export function generateSVG(props: Props) {
+  const { tileSize, colors, imageData, tileAssignments } = props;
 
-export function generateSVG({
-  tileSize,
-  colors,
-  imageData,
-  assignments,
-}: GenerateSVGProps) {
   const ctx = new Context(CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  drawCanvas({ ctx, imageData, tileSize, colors, assignments });
+  drawCanvas({
+    ctx,
+    imageData,
+    tileSize,
+    colors,
+    tileAssignments,
+  });
 
   return ctx.getSerializedSvg();
 }
