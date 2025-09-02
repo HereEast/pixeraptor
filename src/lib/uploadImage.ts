@@ -1,20 +1,20 @@
 export async function uploadImage(file: File) {
-  const img = new Image();
+  const image = new Image();
   const url = URL.createObjectURL(file);
 
-  img.src = url;
+  image.src = url;
 
   await new Promise<HTMLImageElement>((resolve, reject) => {
-    img.onload = () => {
+    image.onload = () => {
       URL.revokeObjectURL(url);
-      resolve(img);
+      resolve(image);
     };
 
-    img.onerror = () => {
+    image.onerror = () => {
       URL.revokeObjectURL(url);
       reject(new Error("Failed to load image"));
     };
   });
 
-  return img;
+  return image;
 }

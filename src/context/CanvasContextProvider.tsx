@@ -18,6 +18,7 @@ interface CanvasContextValueType {
   image: HTMLImageElement | null;
   imageData: ImageData | null;
   filename: string;
+  isImageRestored: boolean;
   handleUpload: (file: File) => Promise<void>;
 }
 
@@ -37,7 +38,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [filename, setFilename] = useState("");
-  const [isRestored, setIsRestored] = useState(false);
+  const [isImageRestored, setIsImageRestored] = useState(false);
 
   // CANVAS
   useEffect(() => {
@@ -47,25 +48,6 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     if (!ctx) return;
 
     ctxRef.current = ctx;
-
-    // Default Image
-    const defaultImage = new Image();
-    defaultImage.src = `/assets/images/${DEFAULT_FILENAME}.png`;
-
-    defaultImage.onload = () => {
-      setImage(defaultImage);
-
-      if (!canvasRef.current) return;
-      const defaultImageData = getImageData(canvasRef.current, defaultImage);
-
-      if (!defaultImageData) return;
-      setImageData(defaultImageData);
-      setFilename(DEFAULT_FILENAME);
-    };
-
-    defaultImage.onerror = () => {
-      console.error("Failed to load default image");
-    };
   }, [canvasRef]);
 
   // RESTORE DATA FROM DB
@@ -73,6 +55,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     async function restoreFromIndexedDB() {
       const savedImageData = await IndexedDB.getImageData();
 
+      // DB Image exists
       if (savedImageData) {
         const imageUrl = URL.createObjectURL(savedImageData.imageBlob);
         const restoredImage = new Image();
@@ -81,7 +64,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
           setImage(restoredImage);
           setImageData(savedImageData.imageData);
           setFilename(savedImageData.filename);
-          setIsRestored(true);
+          setIsImageRestored(true);
 
           URL.revokeObjectURL(imageUrl);
         };
@@ -90,12 +73,35 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
           console.error("Failed to load restored image");
 
           URL.revokeObjectURL(imageUrl);
-          setIsRestored(true);
+          setIsImageRestored(true);
         };
 
         restoredImage.src = imageUrl;
       } else {
-        setIsRestored(true);
+        // Default Image
+        const defaultImage = new Image();
+
+        defaultImage.onload = () => {
+          if (!canvasRef.current) return;
+
+          const defaultImageData = getImageData(
+            canvasRef.current,
+            defaultImage,
+          );
+
+          if (!defaultImageData) return;
+
+          setImage(defaultImage);
+          setImageData(defaultImageData);
+          setFilename(DEFAULT_FILENAME);
+          setIsImageRestored(true);
+        };
+
+        defaultImage.src = `/assets/images/${DEFAULT_FILENAME}.png`;
+
+        defaultImage.onerror = () => {
+          console.error("Failed to load default image");
+        };
       }
     }
 
@@ -105,7 +111,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   // ON IMAGE LOAD
   useEffect(() => {
     if (
-      !isRestored ||
+      !isImageRestored ||
       !canvasRef.current ||
       !image ||
       filename.includes(DEFAULT_FILENAME)
@@ -143,7 +149,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     }
 
     processImageData();
-  }, [image, filename, isRestored]);
+  }, [image, filename, isImageRestored]);
 
   // UPLOAD IMAGE
   const handleUpload = useCallback(async (file: File) => {
@@ -167,6 +173,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
         imageData,
         filename,
         ctxRef,
+        isImageRestored,
         handleUpload,
       }}
     >
