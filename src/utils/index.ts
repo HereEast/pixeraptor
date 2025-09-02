@@ -2,9 +2,14 @@ import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
 
 import { RGBColor } from "~/types";
+import { FALLBACK_COLOR } from "~/constants";
 
 // Get random color
 export function getRandomColor(colors: RGBColor[]): RGBColor {
+  if (colors.length === 0) {
+    return FALLBACK_COLOR;
+  }
+
   const randomIndex = Math.floor(Math.random() * colors.length);
 
   return [...colors[randomIndex]];

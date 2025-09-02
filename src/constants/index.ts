@@ -1,3 +1,5 @@
+import { RGBColor } from "~/types";
+
 export const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL ||
   (process.env.NODE_ENV === "development"
@@ -14,8 +16,10 @@ export const MAX_COLOR_LIMIT = 20;
 export const CANVAS_WIDTH = 800;
 export const CANVAS_HEIGHT = 800;
 
-export const DEFAULT_COLOR_LIMIT = 5;
-export const DEFAULT_TILE_SIZE = 42;
+export const DEFAULT_COLOR_LIMIT = 10;
+export const DEFAULT_TILE_SIZE = 20;
+
+export const FALLBACK_COLOR = [234, 234, 234] as RGBColor;
 
 export const ROUTE = {
   HOME: "/",
