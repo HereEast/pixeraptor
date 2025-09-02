@@ -7,7 +7,7 @@ const SEO_DATA = {
   description:
     "Transform any image into pixel art with Pixeraptor. Customize tile sizes, edit colors, and export as PNG or SVG.",
   url: BASE_URL,
-  imageUrl: `${BASE_URL}/og-image.png`,
+  imageUrl: "/og-image.jpg",
   keywords: [
     "pixel art generator",
     "pixelate image",
