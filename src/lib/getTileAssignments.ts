@@ -1,7 +1,9 @@
 import { RGBColor } from "~/types";
 import { getClosestCentroidIndex } from ".";
 
-// Recompute tile assignments when palette or tile size changes
+//
+// GOAL: Get indices of centroid assigned to each tile (based on tile average color)
+//
 export function getTileAssignments(
   imageData: ImageData,
   centralColors: string[],
@@ -11,7 +13,7 @@ export function getTileAssignments(
   const rows = Math.ceil(imageData.height / tileSize);
 
   // [0, 1, 0, ...] > Number of tiles
-  const newAssignments: number[] = [];
+  const indicesAssignedToTiles: number[] = [];
 
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
@@ -27,11 +29,11 @@ export function getTileAssignments(
         centralColors,
       );
 
-      newAssignments.push(closestIndex);
+      indicesAssignedToTiles.push(closestIndex);
     }
   }
 
-  return newAssignments;
+  return indicesAssignedToTiles;
 }
 
 // Get average tile color
