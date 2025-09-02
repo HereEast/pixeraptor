@@ -4,6 +4,5 @@ export * from "./drawCanvas";
 export * from "./extractCentralColors";
 export * from "./getImageColors";
 export * from "./getImageData";
-export * from "./getMetadata";
 export * from "./uploadImage";
 export * from "./getClosestCentroidIndex";

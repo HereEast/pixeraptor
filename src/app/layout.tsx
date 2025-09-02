@@ -7,7 +7,7 @@ import "./globals.css";
 
 import { Header } from "~/components/Header";
 import { Footer } from "~/components/Footer";
-import { getMetadata } from "~/lib";
+import { getMetadata } from "~/utils/getMetadata";
 
 const jetBrainsMono = Roboto_Mono({
   variable: "--font-mono",
