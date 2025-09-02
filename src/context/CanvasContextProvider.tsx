@@ -28,6 +28,8 @@ interface ImageContextProviderProps {
   children: ReactNode;
 }
 
+const DEFAULT_FILENAME = "pixeraptor-00-image-00";
+
 export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -45,6 +47,25 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     if (!ctx) return;
 
     ctxRef.current = ctx;
+
+    // Default Image
+    const defaultImage = new Image();
+    defaultImage.src = `/assets/images/${DEFAULT_FILENAME}.png`;
+
+    defaultImage.onload = () => {
+      setImage(defaultImage);
+
+      if (!canvasRef.current) return;
+      const defaultImageData = getImageData(canvasRef.current, defaultImage);
+
+      if (!defaultImageData) return;
+      setImageData(defaultImageData);
+      setFilename(DEFAULT_FILENAME);
+    };
+
+    defaultImage.onerror = () => {
+      console.error("Failed to load default image");
+    };
   }, [canvasRef]);
 
   // RESTORE DATA FROM DB
@@ -83,7 +104,13 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
 
   // ON IMAGE LOAD
   useEffect(() => {
-    if (!isRestored || !canvasRef.current || !image) return;
+    if (
+      !isRestored ||
+      !canvasRef.current ||
+      !image ||
+      filename.includes(DEFAULT_FILENAME)
+    )
+      return;
 
     async function processImageData() {
       const canvas = canvasRef.current;
