@@ -64,8 +64,6 @@ export function ModalWrapper({
       onClose={() => setIsOpen(false)}
       className="fixed inset-0 z-20 m-auto max-h-screen max-w-screen bg-transparent p-0"
       onClick={(e) => {
-        console.log(e.target, e.currentTarget);
-        console.log(e.target === e.currentTarget);
         if (e.target === e.currentTarget) {
           e.stopPropagation();
           setIsOpen(false);
