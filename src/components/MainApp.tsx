@@ -7,6 +7,7 @@ import { DownloadButtons } from "./DownloadButtons";
 import { About } from "./About";
 
 import { useCanvasContext } from "~/hooks";
+import { SavedCanvasList } from "./SavedCanvasList";
 
 export function MainApp() {
   const { image } = useCanvasContext();
@@ -27,12 +28,14 @@ export function MainApp() {
         </div>
       </section>
 
-      <section className="flex max-w-[400px] pt-10 pr-4">
+      <SavedCanvasList />
+
+      {/* <section className="flex max-w-[400px] pt-10 pr-4">
         <About>
           Transform your image into pixel art with Pixeraptor. Customize tile
           sizes, edit colors, and export as PNG or SVG.
         </About>
-      </section>
+      </section> */}
     </div>
   );
 }
