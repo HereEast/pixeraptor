@@ -4,7 +4,7 @@ import { ISavedCanvas } from "~/types";
 
 // Context Values
 interface SavedCanvasesContextValueType {
-  savedCanvas: ISavedCanvas[];
+  savedCanvases: ISavedCanvas[];
   addCanvas: (canvasState: ISavedCanvas) => void;
   removeCanvas: (index: number) => void;
 }
@@ -18,20 +18,20 @@ interface SavedCanvasProviderProps {
 
 // Provider
 export function SavedCanvasProvider({ children }: SavedCanvasProviderProps) {
-  const [savedCanvas, setSavedCanvas] = useState<ISavedCanvas[]>([]);
+  const [savedCanvases, setSavedCanvases] = useState<ISavedCanvas[]>([]);
 
   function addCanvas(canvasState: ISavedCanvas) {
-    setSavedCanvas([...savedCanvas, canvasState]);
+    setSavedCanvases([...savedCanvases, canvasState]);
   }
 
   function removeCanvas(index: number) {
-    setSavedCanvas(savedCanvas.filter((_, i) => i !== index));
+    setSavedCanvases(savedCanvases.filter((_, i) => i !== index));
   }
 
   return (
     <SavedCanvasContext.Provider
       value={{
-        savedCanvas,
+        savedCanvases,
         addCanvas,
         removeCanvas,
       }}

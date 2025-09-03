@@ -1,16 +1,22 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "./Button";
 
 interface ModalPortalProps {
   children: ReactNode;
+  title?: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
 // Modal Portal
-export function Modal({ children, isOpen, setIsOpen }: ModalPortalProps) {
+export function Modal({
+  children,
+  title,
+  isOpen,
+  setIsOpen,
+}: ModalPortalProps) {
   if (typeof window === "undefined") {
     return null;
   }
@@ -22,7 +28,7 @@ export function Modal({ children, isOpen, setIsOpen }: ModalPortalProps) {
   }
 
   return createPortal(
-    <ModalWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
+    <ModalWrapper title={title} isOpen={isOpen} setIsOpen={setIsOpen}>
       {children}
     </ModalWrapper>,
     modalElement,
@@ -32,49 +38,60 @@ export function Modal({ children, isOpen, setIsOpen }: ModalPortalProps) {
 // Modal
 export function ModalWrapper({
   children,
+  title = "",
   isOpen,
   setIsOpen,
 }: ModalPortalProps) {
-  // Close on Escape
+  const ref = useRef<HTMLDialogElement | null>(null);
+
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
-      }
-    };
+    const dialog = ref.current;
 
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
+    if (!dialog) return;
+
+    if (isOpen && !dialog.open) {
+      dialog.showModal();
       document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
+    } else if (!isOpen && dialog.open) {
+      dialog.close();
       document.body.style.overflow = "auto";
-    };
-  }, [isOpen, setIsOpen]);
+    }
+  }, [isOpen]);
 
   return (
-    <div
-      className="fixed inset-0 z-20 flex items-center justify-center bg-stone-900/75 p-10"
-      onClick={() => setIsOpen(false)}
+    <dialog
+      ref={ref}
+      onClose={() => setIsOpen(false)}
+      className="fixed inset-0 z-20 m-auto max-h-screen max-w-screen bg-transparent p-0"
+      onClick={(e) => {
+        console.log(e.target, e.currentTarget);
+        console.log(e.target === e.currentTarget);
+        if (e.target === e.currentTarget) {
+          e.stopPropagation();
+          setIsOpen(false);
+        }
+      }}
     >
-      <dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
+      <div
+        className="mx-auto w-fit bg-stone-50 p-5 md:p-10"
         onClick={(e) => e.stopPropagation()}
-        className="mx-auto w-[400px] overflow-auto bg-stone-50 p-10"
       >
-        <div className="flex justify-between">
-          <h2 className="text-sm font-semibold uppercase">Saved Canvas</h2>
-          <Button size="small" onClick={() => setIsOpen(false)}>
+        <div className="mb-4 flex items-center justify-between">
+          {title && (
+            <h2 className="text-sm font-semibold uppercase">{title}</h2>
+          )}
+          <Button
+            size="small"
+            className="ml-auto"
+            onClick={() => setIsOpen(false)}
+          >
             x
           </Button>
         </div>
 
         {/* Content */}
         <div>{children}</div>
-      </dialog>
-    </div>
+      </div>
+    </dialog>
   );
 }

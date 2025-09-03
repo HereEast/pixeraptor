@@ -2,7 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 import { Button } from "./ui/Button";
-import { Modal } from "./ui/Modal";
+import { SavedCanvasModal } from "./SavedCanvasModal";
 import { useSavedCanvas } from "~/hooks/useSavedCanvas";
 import { ISavedCanvas } from "~/types";
 
@@ -15,73 +15,66 @@ import { ISavedCanvas } from "~/types";
 const SAVED_CANVAS_LIMIT = 10;
 
 export function SavedCanvasList() {
-  const { savedCanvas, removeCanvas } = useSavedCanvas();
-
-  const [isOpen, setIsOpen] = useState(true);
+  const { savedCanvases, removeCanvas } = useSavedCanvas();
 
   return (
     <section>
       <h2 className="mb-1 flex gap-2 text-sm font-semibold uppercase">
         <span>Saved</span>
-        <span>[{savedCanvas.length}]</span>
+        <span>[{savedCanvases.length}]</span>
       </h2>
 
       <ul className="flex gap-1">
-        {savedCanvas.map((canvas, index) => (
+        {savedCanvases.map((item, index) => (
           <SavedCanvasItem
-            key={canvas.dataUrl}
-            canvas={canvas}
+            key={item.dataUrl}
+            item={item}
             index={index}
             removeCanvas={removeCanvas}
           />
         ))}
       </ul>
-
-      {isOpen && (
-        <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-          <div>SavedCanvasPopup</div>
-        </Modal>
-      )}
     </section>
   );
 }
 
 // Saved Canvas Item
 interface SavedCanvasItemProps {
-  canvas: ISavedCanvas;
+  item: ISavedCanvas;
   index: number;
   removeCanvas: (index: number) => void;
 }
 
-function SavedCanvasItem({
-  canvas,
-  index,
-  removeCanvas,
-}: SavedCanvasItemProps) {
-  const [isOpen, setIsOpen] = useState(true);
+function SavedCanvasItem({ item, index, removeCanvas }: SavedCanvasItemProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <li
-      key={canvas.dataUrl}
-      className="relative transition-transform duration-200 hover:scale-105"
+      key={index}
+      className="relative cursor-pointer transition-transform duration-200 hover:scale-105"
       onClick={() => setIsOpen(true)}
     >
       <Button
         className="absolute top-0 right-0 size-7 px-0 font-light"
-        onClick={() => removeCanvas(index)}
+        onClick={(e) => {
+          e.stopPropagation();
+          removeCanvas(index);
+        }}
       >
         x
       </Button>
 
       <Image
-        src={canvas.dataUrl}
+        src={item.dataUrl}
         alt="Saved Pixeraptor Canvas"
         width={100}
         height={100}
         className="object-cover"
       />
 
-      {/* {isOpen && <SavedCanvasPopup canvas={canvas} />} */}
+      {isOpen && (
+        <SavedCanvasModal item={item} isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
     </li>
   );
 }

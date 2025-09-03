@@ -38,7 +38,7 @@ export function Canvas() {
         <Button
           size="icon"
           onClick={handleSaveImage}
-          className="absolute top-0 right-0 text-xl font-light"
+          className="absolute right-0 bottom-0 text-xl font-light"
         >
           +
         </Button>

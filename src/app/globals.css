@@ -11,6 +11,10 @@ body {
   text-decoration-skip-ink: none;
 }
 
+dialog::backdrop {
+  @apply bg-stone-900/75;
+}
+
 input[type="color"] {
   appearance: none;
   -moz-appearance: none;
