@@ -1,13 +1,23 @@
+import { useState } from "react";
 import Image from "next/image";
 
 import { Button } from "./ui/Button";
+import { Modal } from "./ui/Modal";
 import { useSavedCanvas } from "~/hooks/useSavedCanvas";
 import { ISavedCanvas } from "~/types";
 
-const SAVED_CANVAS_LIMIT = 6;
+// Open in popup
+// Download as PNG/SVG from the Popup
+// Delete from the Popup
+// List saved canvases in the popup
+// Limit to 10
+
+const SAVED_CANVAS_LIMIT = 10;
 
 export function SavedCanvasList() {
   const { savedCanvas, removeCanvas } = useSavedCanvas();
+
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <section>
@@ -26,6 +36,12 @@ export function SavedCanvasList() {
           />
         ))}
       </ul>
+
+      {isOpen && (
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+          <div>SavedCanvasPopup</div>
+        </Modal>
+      )}
     </section>
   );
 }
@@ -42,10 +58,13 @@ function SavedCanvasItem({
   index,
   removeCanvas,
 }: SavedCanvasItemProps) {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <li
       key={canvas.dataUrl}
       className="relative transition-transform duration-200 hover:scale-105"
+      onClick={() => setIsOpen(true)}
     >
       <Button
         className="absolute top-0 right-0 size-7 px-0 font-light"
@@ -61,6 +80,8 @@ function SavedCanvasItem({
         height={100}
         className="object-cover"
       />
+
+      {/* {isOpen && <SavedCanvasPopup canvas={canvas} />} */}
     </li>
   );
 }
