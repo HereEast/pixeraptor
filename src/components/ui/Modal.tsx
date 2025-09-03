@@ -11,6 +11,10 @@ interface ModalPortalProps {
 
 // Modal Portal
 export function Modal({ children, isOpen, setIsOpen }: ModalPortalProps) {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   const modalElement = document.getElementById("modal");
 
   if (!modalElement) {
