@@ -19,7 +19,7 @@ export function SavedCanvasList() {
         <span>[{savedCanvases.length}]</span>
       </h2>
 
-      <div className="w-full overflow-y-auto md:max-h-[72vh]">
+      <div className="w-full overflow-y-auto md:max-h-[80vh]">
         <ul className="grid w-full grid-cols-2 gap-1 md:w-[80px] md:grid-cols-1">
           {savedCanvases.map((item, index) => (
             <SavedCanvasItem

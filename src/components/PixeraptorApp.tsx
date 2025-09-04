@@ -37,6 +37,13 @@ export function PixeraptorApp() {
             )}
           </div>
         </div>
+
+        <section className="mt-16 hidden md:block">
+          <About>
+            Transform your image into pixel art with Pixeraptor. Customize tile
+            sizes, edit colors, and export as PNG or SVG.
+          </About>
+        </section>
       </section>
 
       <section className="md:mt-12">{image && <Controls />}</section>
@@ -45,12 +52,12 @@ export function PixeraptorApp() {
         <SavedCanvasList />
       </section>
 
-      {/* <section className="flex max-w-[400px] pt-10 pr-4">
+      <section className="md:hidden">
         <About>
           Transform your image into pixel art with Pixeraptor. Customize tile
           sizes, edit colors, and export as PNG or SVG.
         </About>
-      </section> */}
+      </section>
     </div>
   );
 }
