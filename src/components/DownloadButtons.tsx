@@ -1,41 +1,67 @@
-import React from "react";
+import React, { RefObject } from "react";
 
 import { Button } from "~/components/ui/Button";
-import { useCanvasContext, useSettingsContext } from "~/hooks";
 import { downloadPNG, downloadSVG } from "~/lib";
+import { cn } from "~/utils";
 
-export function DownloadButtons() {
-  const { canvasRef, filename, imageData } = useCanvasContext();
-  const { tileSize, editedColors, tileAssignments } = useSettingsContext();
+interface DownloadButtonProps {
+  filename: string;
+  title?: string;
+  disabled?: boolean;
+  className?: string;
+}
 
-  // DOWNLOAD PNG
-  function handleDownloadPNG() {
-    if (canvasRef.current) {
-      downloadPNG(canvasRef.current, filename);
-    }
-  }
+// Download SVG Button
+interface DownloadSVGButtonProps extends DownloadButtonProps {
+  imageData: ImageData | null;
+  editedColors: string[];
+  tileSize: number;
+  tileAssignments: number[];
+}
 
-  // DOWNLOAD SVG
+export function DownloadSVGButton(props: DownloadSVGButtonProps) {
   function handleDownloadSVG() {
-    if (canvasRef.current && imageData && tileAssignments.length > 0) {
-      downloadSVG({
-        tileSize,
-        filename,
-        colors: editedColors,
-        imageData,
-        tileAssignments,
-      });
-    }
+    if (!props.imageData) return;
+
+    downloadSVG({
+      tileSize: props.tileSize,
+      filename: props.filename,
+      colors: props.editedColors,
+      imageData: props.imageData,
+      tileAssignments: props.tileAssignments,
+    });
   }
 
   return (
-    <div className="flex flex-col gap-2 sm:flex-row">
-      <Button onClick={handleDownloadPNG} className="h-20 w-full">
-        Download .PNG
-      </Button>
-      <Button onClick={handleDownloadSVG} className="h-20 w-full">
-        Download .SVG
-      </Button>
-    </div>
+    <Button
+      disabled={props.disabled || false}
+      onClick={handleDownloadSVG}
+      className={cn("h-20 w-full", props.className || "")}
+    >
+      {props.title || "Download .SVG"}
+    </Button>
+  );
+}
+
+// Download PNG Button
+interface DownloadPNGButtonProps extends DownloadButtonProps {
+  canvasRef: RefObject<HTMLCanvasElement | null>;
+}
+
+export function DownloadPNGButton(props: DownloadPNGButtonProps) {
+  function handleDownloadPNG() {
+    if (!props.canvasRef?.current) return;
+
+    downloadPNG(props.canvasRef?.current, props.filename);
+  }
+
+  return (
+    <Button
+      disabled={props.disabled || false}
+      onClick={handleDownloadPNG}
+      className={cn("h-20 w-full", props.className || "")}
+    >
+      {props.title || "Download .PNG"}
+    </Button>
   );
 }
