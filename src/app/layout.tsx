@@ -34,6 +34,8 @@ export default function RootLayout({
         <main className="grow p-5">{children}</main>
         <Footer />
         <Analytics />
+
+        <div id="modal"></div>
       </body>
     </html>
   );

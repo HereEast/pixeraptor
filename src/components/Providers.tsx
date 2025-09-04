@@ -1,4 +1,8 @@
-import { CanvasContextProvider, SettingsContextProvider } from "~/context";
+import {
+  CanvasContextProvider,
+  SavedCanvasProvider,
+  SettingsContextProvider,
+} from "~/context";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -7,7 +11,9 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <CanvasContextProvider>
-      <SettingsContextProvider>{children}</SettingsContextProvider>
+      <SettingsContextProvider>
+        <SavedCanvasProvider>{children}</SavedCanvasProvider>
+      </SettingsContextProvider>
     </CanvasContextProvider>
   );
 }

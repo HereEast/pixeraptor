@@ -20,6 +20,7 @@ export const DEFAULT_COLOR_LIMIT = 10;
 export const DEFAULT_TILE_SIZE = 20;
 
 export const FALLBACK_COLOR = [234, 234, 234] as RGBColor;
+export const SAVED_CANVAS_LIMIT = 10;
 
 export const ROUTE = {
   HOME: "/",
