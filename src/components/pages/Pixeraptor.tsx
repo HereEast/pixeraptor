@@ -1,12 +1,12 @@
 "use client";
 
-import { MainApp } from "../MainApp";
+import { PixeraptorApp } from "../PixeraptorApp";
 import { Providers } from "../Providers";
 
-export function Home() {
+export function Pixeraptor() {
   return (
     <Providers>
-      <MainApp />
+      <PixeraptorApp />
     </Providers>
   );
 }

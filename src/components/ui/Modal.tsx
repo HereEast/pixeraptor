@@ -2,12 +2,14 @@ import { ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "./Button";
+import { cn } from "~/utils";
 
-interface ModalPortalProps {
+interface ModalProps {
   children: ReactNode;
   title?: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  className?: string;
 }
 
 // Modal Portal
@@ -16,7 +18,8 @@ export function Modal({
   title,
   isOpen,
   setIsOpen,
-}: ModalPortalProps) {
+  className = "",
+}: ModalProps) {
   if (typeof window === "undefined") {
     return null;
   }
@@ -28,7 +31,12 @@ export function Modal({
   }
 
   return createPortal(
-    <ModalWrapper title={title} isOpen={isOpen} setIsOpen={setIsOpen}>
+    <ModalWrapper
+      title={title}
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      className={className}
+    >
       {children}
     </ModalWrapper>,
     modalElement,
@@ -41,7 +49,8 @@ export function ModalWrapper({
   title = "",
   isOpen,
   setIsOpen,
-}: ModalPortalProps) {
+  className = "",
+}: ModalProps) {
   const ref = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
@@ -71,10 +80,10 @@ export function ModalWrapper({
       }}
     >
       <div
-        className="mx-auto w-fit bg-stone-50 p-5 md:p-10"
+        className={cn("mx-auto w-fit bg-stone-50 p-5 md:p-10", className)}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           {title && (
             <h2 className="text-sm font-semibold uppercase">{title}</h2>
           )}
@@ -88,7 +97,7 @@ export function ModalWrapper({
         </div>
 
         {/* Content */}
-        <div>{children}</div>
+        {children}
       </div>
     </dialog>
   );

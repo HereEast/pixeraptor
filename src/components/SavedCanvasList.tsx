@@ -1,80 +1,53 @@
-import { useState } from "react";
-import Image from "next/image";
+import { SavedCanvasItem } from "./SavedCanvasItem";
 
-import { Button } from "./ui/Button";
-import { SavedCanvasModal } from "./SavedCanvasModal";
-import { useSavedCanvas } from "~/hooks/useSavedCanvas";
-import { ISavedCanvas } from "~/types";
+import { SAVED_CANVAS_LIMIT } from "~/constants";
+import { useSavedCanvas } from "~/hooks";
 
-// Open in popup
-// Download as PNG/SVG from the Popup
 // Delete from the Popup
 // List saved canvases in the popup
-// Limit to 10
-
-const SAVED_CANVAS_LIMIT = 10;
+// If this exact canvas already saved, don't show it in the list
 
 export function SavedCanvasList() {
   const { savedCanvases, removeCanvas } = useSavedCanvas();
 
+  const emptyLength = SAVED_CANVAS_LIMIT - savedCanvases.length;
+
   return (
-    <section>
-      <h2 className="mb-1 flex gap-2 text-sm font-semibold uppercase">
+    <div>
+      <h2 className="mb-4 flex gap-2 text-sm font-semibold uppercase">
         <span>Saved</span>
         <span>[{savedCanvases.length}]</span>
       </h2>
 
-      <ul className="flex gap-1">
-        {savedCanvases.map((item, index) => (
-          <SavedCanvasItem
-            key={item.dataUrl}
-            item={item}
-            index={index}
-            removeCanvas={removeCanvas}
-          />
-        ))}
-      </ul>
-    </section>
-  );
-}
+      <div className="w-full overflow-y-auto md:max-h-[72vh]">
+        <ul className="grid w-full grid-cols-2 gap-1 md:w-[80px] md:grid-cols-1">
+          {savedCanvases.map((item, index) => (
+            <SavedCanvasItem
+              key={item.dataUrl}
+              item={item}
+              index={index}
+              removeCanvas={removeCanvas}
+            />
+          ))}
 
-// Saved Canvas Item
-interface SavedCanvasItemProps {
-  item: ISavedCanvas;
-  index: number;
-  removeCanvas: (index: number) => void;
-}
+          {new Array(emptyLength).fill(0).map((_, index) => (
+            <li
+              key={index}
+              className="hidden aspect-square max-h-[400px] max-w-[400px] shrink-0 bg-stone-200/50 md:block"
+            />
+          ))}
+        </ul>
+      </div>
 
-function SavedCanvasItem({ item, index, removeCanvas }: SavedCanvasItemProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <li
-      key={index}
-      className="relative cursor-pointer transition-transform duration-200 hover:scale-105"
-      onClick={() => setIsOpen(true)}
-    >
-      <Button
-        className="absolute top-0 right-0 size-7 px-0 font-light"
-        onClick={(e) => {
-          e.stopPropagation();
-          removeCanvas(index);
-        }}
-      >
-        x
-      </Button>
-
-      <Image
-        src={item.dataUrl}
-        alt="Saved Pixeraptor Canvas"
-        width={100}
-        height={100}
-        className="object-cover"
-      />
-
-      {isOpen && (
-        <SavedCanvasModal item={item} isOpen={isOpen} setIsOpen={setIsOpen} />
+      {savedCanvases.length === 0 && (
+        <div className="w-full bg-stone-200/50 p-10 text-center text-sm md:hidden">
+          No saved canvases
+        </div>
       )}
-    </li>
+
+      <div className="text-center">
+        <span>...</span>
+      </div>
+    </div>
   );
 }

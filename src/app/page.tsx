@@ -1,5 +1,5 @@
-import { Home } from "~/components/pages/Home";
+import { Pixeraptor } from "~/components/pages/Pixeraptor";
 
-export default function HomePage() {
-  return <Home />;
+export default function PixeraptorPage() {
+  return <Pixeraptor />;
 }

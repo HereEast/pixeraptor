@@ -7,7 +7,7 @@ export function TileSizeRange() {
   const { tileSize, setTileSize } = useSettingsContext();
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 text-sm font-semibold uppercase">
         <span>Tile</span>
         <span>[{tileSize}]</span>
