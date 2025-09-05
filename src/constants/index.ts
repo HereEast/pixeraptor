@@ -22,6 +22,8 @@ export const DEFAULT_TILE_SIZE = 20;
 export const FALLBACK_COLOR = [234, 234, 234] as RGBColor;
 export const SAVED_CANVAS_LIMIT = 10;
 
+export const GALLERY_IMAGES_COUNT = 4;
+
 export const ROUTE = {
   HOME: "/",
   ABOUT: "/about",
