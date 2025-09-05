@@ -32,3 +32,12 @@ export const ROUTE = {
 export const CONTACT = {
   EMAIL: "heypeoplework@gmail.com",
 };
+
+export const ABOUT_FEATURES = [
+  "Upload .PNG/JPG (Max 2MB)",
+  "Adjust tile size",
+  "Adjust color limit",
+  `Refresh palette → "RE"`,
+  "Edit colors → Click on the color swatch → Select new color",
+  "Download .PNG/SVG (800x800)",
+];

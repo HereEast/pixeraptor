@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-import { ABOUT_FEATURES } from "~/components/AboutSection";
-import { CONTACT } from "~/constants";
+import { ABOUT_FEATURES, CONTACT } from "~/constants";
 
 export default function AboutPage() {
   return (
