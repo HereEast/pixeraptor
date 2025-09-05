@@ -20,7 +20,7 @@ export function Header() {
       <Link href={ROUTE.HOME} className="flex items-center gap-2">
         <div className="size-5">
           <Image
-            src="/assets/logo-img.png"
+            src="/assets/images/logo-img.png"
             alt="Pixeraptor"
             width={100}
             height={100}

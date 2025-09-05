@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ABOUT_FEATURES } from "~/components/About";
+import { ABOUT_FEATURES } from "~/components/AboutSection";
 import { CONTACT } from "~/constants";
 
 export default function AboutPage() {
@@ -51,7 +51,7 @@ export default function AboutPage() {
 
         <div className="mt-8 size-24">
           <Image
-            src="/assets/logo-img.png"
+            src="/assets/images/logo-img.png"
             alt="Pixeraptor Logo"
             width={400}
             height={400}

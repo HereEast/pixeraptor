@@ -12,7 +12,7 @@ export function ColorsRange() {
       <div className="relative flex items-center justify-between gap-2">
         <div className="flex items-center justify-between gap-2 text-sm font-semibold uppercase">
           <span>Colors</span>
-          <span>[{colorLimit}]</span>
+          <span>[{colorLimit.toString().padStart(2, "0")}]</span>
         </div>
 
         <Button
