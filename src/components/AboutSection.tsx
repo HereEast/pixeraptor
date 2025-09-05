@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
 
-import { Skeleton } from "./ui/Skeleton";
+import { Gallery } from "./Gallery";
 import { CONTACT, GALLERY_IMAGES_COUNT, ABOUT_FEATURES } from "~/constants";
 import { IPublicImageData } from "~/types";
 
@@ -27,7 +26,7 @@ export function AboutSection() {
 
   return (
     <section className="grid md:grid-cols-[1fr_85px] md:gap-6">
-      <div className="grid w-full md:grid-cols-[minmax(0,400px)_1fr] md:gap-6">
+      <div className="grid w-full grid-cols-1 gap-16 md:grid-cols-[minmax(0,400px)_minmax(0,1080px)] md:gap-6">
         <div className="md:pr-4">
           <Description />
         </div>
@@ -37,32 +36,6 @@ export function AboutSection() {
 
       <div className="hidden md:block" />
     </section>
-  );
-}
-
-// Gallery
-interface GalleryProps {
-  imagesData: IPublicImageData[];
-}
-
-export function Gallery({ imagesData }: GalleryProps) {
-  return (
-    <div>
-      <ul className="grid grid-cols-4 gap-2">
-        {imagesData.length === 0 &&
-          Array.from({ length: GALLERY_IMAGES_COUNT }).map((_, i) => (
-            <li key={i}>
-              <Skeleton />
-            </li>
-          ))}
-
-        {imagesData.map((image) => (
-          <li key={image.id}>
-            <Image src={image.src} alt={image.alt} width={400} height={400} />
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
@@ -105,14 +78,14 @@ function Description() {
         </div>
       </div>
 
-      <div className="size-24">
+      {/* <div className="size-24">
         <Image
           src="/assets/images/logo-img.png"
           alt="Pixeraptor Logo"
           width={400}
           height={400}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
