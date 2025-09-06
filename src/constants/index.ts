@@ -22,6 +22,8 @@ export const DEFAULT_TILE_SIZE = 20;
 export const FALLBACK_COLOR = [234, 234, 234] as RGBColor;
 export const SAVED_CANVAS_LIMIT = 10;
 
+export const GALLERY_IMAGES_COUNT = 7;
+
 export const ROUTE = {
   HOME: "/",
   ABOUT: "/about",
@@ -30,3 +32,12 @@ export const ROUTE = {
 export const CONTACT = {
   EMAIL: "heypeoplework@gmail.com",
 };
+
+export const ABOUT_FEATURES = [
+  "Upload .PNG/JPG (Max 2MB)",
+  "Adjust tile size",
+  "Adjust color limit",
+  `Refresh palette → "RE"`,
+  "Edit colors → Click on the color swatch → Select new color",
+  "Download .PNG/SVG (800x800)",
+];

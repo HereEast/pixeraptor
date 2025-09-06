@@ -9,3 +9,9 @@ export interface ISavedCanvas {
     imageData: ImageData;
   };
 }
+
+export interface IPublicImageData {
+  src: string;
+  alt: string;
+  id: string;
+}
