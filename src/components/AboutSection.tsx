@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Gallery } from "./Gallery";
 import { CONTACT, GALLERY_IMAGES_COUNT, ABOUT_FEATURES } from "~/constants";
 import { IPublicImageData } from "~/types";
+import Image from "next/image";
 
 // About Section
 export function AboutSection() {
@@ -26,7 +27,7 @@ export function AboutSection() {
 
   return (
     <section className="grid md:grid-cols-[1fr_85px] md:gap-6">
-      <div className="grid w-full grid-cols-1 gap-16 md:grid-cols-[minmax(0,400px)_minmax(0,1080px)] md:gap-6">
+      <div className="grid w-full grid-cols-1 gap-16 md:grid-cols-[minmax(0,400px)_minmax(0,1200px)] md:gap-6">
         <div className="md:pr-4">
           <Description />
         </div>
@@ -42,7 +43,7 @@ export function AboutSection() {
 // Description
 function Description() {
   return (
-    <div className="space-y-16">
+    <div className="flex h-full flex-col justify-between gap-16">
       <div className="flex w-full flex-col gap-8 text-sm">
         <div className="flex flex-col gap-2">
           <h1 className="font-bold">Free Online Pixel Art Generator</h1>
@@ -78,14 +79,14 @@ function Description() {
         </div>
       </div>
 
-      {/* <div className="size-24">
+      <div className="hidden size-20 md:block">
         <Image
           src="/assets/images/logo-img.png"
           alt="Pixeraptor Logo"
           width={400}
           height={400}
         />
-      </div> */}
+      </div>
     </div>
   );
 }
