@@ -15,7 +15,7 @@ export function Gallery({ imagesData, className }: GalleryProps) {
     <div>
       <ul
         className={cn(
-          "grid grid-cols-3 gap-2 md:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]",
+          "grid grid-cols-3 gap-2 md:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]",
           className,
         )}
       >

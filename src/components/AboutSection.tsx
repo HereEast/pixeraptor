@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 import { Gallery } from "./Gallery";
 import { CONTACT, GALLERY_IMAGES_COUNT, ABOUT_FEATURES } from "~/constants";
 import { IPublicImageData } from "~/types";
-import Image from "next/image";
 
 // About Section
 export function AboutSection() {
@@ -16,9 +16,9 @@ export function AboutSection() {
       const imageIdx = String(i + 1).padStart(2, "0");
 
       return {
-        src: `/assets/gallery/gallery-img-${imageIdx}.png`,
-        alt: `Gallery Image ${imageIdx}`,
-        id: `gallery-img-${imageIdx}`,
+        src: `/assets/gallery/img-${imageIdx}.png`,
+        alt: `Image ${imageIdx}`,
+        id: `img-${imageIdx}`,
       };
     });
 
