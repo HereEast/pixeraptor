@@ -1,7 +1,6 @@
 import { getImageColors, getClosestCentroidIndex } from ".";
 import { getRandomColor, rgbToHex } from "~/utils";
 import { RGBColor } from "~/types";
-import { FALLBACK_COLOR } from "~/constants";
 
 const ITERATIONS = 5;
 
@@ -13,11 +12,6 @@ export function extractCentralColors(
   limit: number,
 ): string[] {
   const imageColors = getImageColors(imageData);
-
-  // Safety check: if no colors available, return default colors
-  if (imageColors.length === 0) {
-    return new Array(limit).fill(rgbToHex(FALLBACK_COLOR));
-  }
 
   // [[r, g, b]], [0, 1, 0, ...] > Update on every iteration
   let centroids: RGBColor[] = getInitialCentroids(imageColors, limit);
@@ -32,25 +26,6 @@ export function extractCentralColors(
   const hexColors = centroids.map(([r, g, b]) => rgbToHex([r, g, b]));
 
   return hexColors;
-}
-
-// Which centroid is the closest to each color
-function assignCentroidIndicesToColors(
-  imageColors: RGBColor[],
-  centroids: RGBColor[],
-) {
-  const assignedIndices: number[] = [];
-
-  for (let i = 0; i < imageColors.length; i++) {
-    const bestCentroidIndex = getClosestCentroidIndex(
-      imageColors[i],
-      centroids,
-    );
-
-    assignedIndices.push(bestCentroidIndex);
-  }
-
-  return assignedIndices;
 }
 
 // Update centroids
@@ -98,15 +73,29 @@ function updateCentroids(
   return updatedCentroids;
 }
 
+// Which centroid is the closest to each color
+function assignCentroidIndicesToColors(
+  imageColors: RGBColor[],
+  centroids: RGBColor[],
+) {
+  const assignedIndices: number[] = [];
+
+  for (let i = 0; i < imageColors.length; i++) {
+    const bestCentroidIndex = getClosestCentroidIndex(
+      imageColors[i],
+      centroids,
+    );
+
+    assignedIndices.push(bestCentroidIndex);
+  }
+
+  return assignedIndices;
+}
+
 // Get initial centroids
 export function getInitialCentroids(colors: RGBColor[], limit: number) {
   const centroids: RGBColor[] = [];
   const usedIndexes = new Set<number>();
-
-  // Safety check: if no colors available, return default centroids
-  if (colors.length === 0) {
-    return new Array(limit).fill(FALLBACK_COLOR);
-  }
 
   for (let i = 0; i < limit; i++) {
     let randomIndex = Math.floor(Math.random() * colors.length);

@@ -1,4 +1,4 @@
-import { getColorDistance, hexToRgb } from "~/utils";
+import { hexToRgb } from "~/utils";
 import { RGBColor } from "~/types";
 
 // Get closest color index
@@ -23,4 +23,13 @@ export function getClosestCentroidIndex(
   }
 
   return bestIndex;
+}
+
+// Color distance
+export function getColorDistance(color1: RGBColor, color2: RGBColor) {
+  // Distance in 3D space (Euclidean distance)
+  const [r1, g1, b1] = color1;
+  const [r2, g2, b2] = color2;
+
+  return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
 }

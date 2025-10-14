@@ -18,7 +18,6 @@ interface CanvasContextValueType {
   image: HTMLImageElement | null;
   imageData: ImageData | null;
   filename: string;
-  isImageRestored: boolean;
   handleUpload: (file: File) => Promise<void>;
 }
 
@@ -38,7 +37,6 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [filename, setFilename] = useState("");
-  const [isImageRestored, setIsImageRestored] = useState(false);
 
   // CANVAS
   useEffect(() => {
@@ -64,7 +62,6 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
           setImage(restoredImage);
           setImageData(savedImageData.imageData);
           setFilename(savedImageData.filename);
-          setIsImageRestored(true);
 
           URL.revokeObjectURL(imageUrl);
         };
@@ -73,7 +70,6 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
           console.error("Failed to load restored image");
 
           URL.revokeObjectURL(imageUrl);
-          setIsImageRestored(true);
         };
 
         restoredImage.src = imageUrl;
@@ -94,7 +90,6 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
           setImage(defaultImage);
           setImageData(defaultImageData);
           setFilename(DEFAULT_FILENAME);
-          setIsImageRestored(true);
         };
 
         defaultImage.src = `/assets/images/${DEFAULT_FILENAME}.png`;
@@ -110,13 +105,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
 
   // ON IMAGE LOAD
   useEffect(() => {
-    if (
-      !isImageRestored ||
-      !canvasRef.current ||
-      !image ||
-      filename.includes(DEFAULT_FILENAME)
-    )
-      return;
+    if (filename.includes(DEFAULT_FILENAME)) return;
 
     async function processImageData() {
       const canvas = canvasRef.current;
@@ -149,7 +138,11 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     }
 
     processImageData();
-  }, [image, filename, isImageRestored]);
+  }, [image, filename]);
+
+  ////////////////////////////////
+  /////// HANDLERS ///////////////
+  ////////////////////////////////
 
   // UPLOAD IMAGE
   const handleUpload = useCallback(async (file: File) => {
@@ -173,7 +166,6 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
         imageData,
         filename,
         ctxRef,
-        isImageRestored,
         handleUpload,
       }}
     >

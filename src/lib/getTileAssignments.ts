@@ -6,7 +6,7 @@ import { getClosestCentroidIndex } from ".";
 //
 export function getTileAssignments(
   imageData: ImageData,
-  centralColors: string[],
+  generatedCentralColors: string[],
   tileSize: number,
 ) {
   const cols = Math.ceil(imageData.width / tileSize);
@@ -26,7 +26,7 @@ export function getTileAssignments(
 
       const closestIndex = getClosestCentroidIndex(
         averageTileColor,
-        centralColors,
+        generatedCentralColors,
       );
 
       indicesAssignedToTiles.push(closestIndex);

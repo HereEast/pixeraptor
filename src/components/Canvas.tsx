@@ -3,14 +3,14 @@ import { ISavedCanvas } from "~/types";
 import { useCanvasContext, useSavedCanvas, useSettingsContext } from "~/hooks";
 
 export function Canvas() {
-  const { canvasRef, isImageRestored, imageData } = useCanvasContext();
+  const { canvasRef, imageData } = useCanvasContext();
   const { editedColors, tileSize, tileAssignments } = useSettingsContext();
   const { saveCanvas, isLimit } = useSavedCanvas();
 
-  const isLoading = !isImageRestored && editedColors.length === 0;
+  const isLoading = editedColors.length === 0;
 
   // Save Canvas
-  function handleSaveImage() {
+  function handleSaveCanvas() {
     if (!canvasRef.current || !imageData || isLimit) return;
 
     const currentCanvas: ISavedCanvas = {
@@ -38,7 +38,7 @@ export function Canvas() {
         <Button
           size="icon"
           disabled={isLimit}
-          onClick={handleSaveImage}
+          onClick={handleSaveCanvas}
           className="absolute right-0 bottom-0 text-xl font-light"
         >
           +
