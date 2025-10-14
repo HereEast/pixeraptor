@@ -140,6 +140,10 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     processImageData();
   }, [image, filename]);
 
+  ////////////////////////////////
+  /////// HANDLERS ///////////////
+  ////////////////////////////////
+
   // UPLOAD IMAGE
   const handleUpload = useCallback(async (file: File) => {
     try {

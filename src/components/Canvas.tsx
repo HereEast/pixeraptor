@@ -10,7 +10,7 @@ export function Canvas() {
   const isLoading = editedColors.length === 0;
 
   // Save Canvas
-  function handleSaveImage() {
+  function handleSaveCanvas() {
     if (!canvasRef.current || !imageData || isLimit) return;
 
     const currentCanvas: ISavedCanvas = {
@@ -38,7 +38,7 @@ export function Canvas() {
         <Button
           size="icon"
           disabled={isLimit}
-          onClick={handleSaveImage}
+          onClick={handleSaveCanvas}
           className="absolute right-0 bottom-0 text-xl font-light"
         >
           +

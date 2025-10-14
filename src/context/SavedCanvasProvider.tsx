@@ -31,6 +31,10 @@ export function SavedCanvasProvider({ children }: SavedCanvasProviderProps) {
     }
   }, [savedCanvases]);
 
+  ////////////////////////////////
+  /////// HANDLERS ///////////////
+  ////////////////////////////////
+
   // Save Canvas
   function saveCanvas(canvasState: ISavedCanvas) {
     if (isLimit) {
