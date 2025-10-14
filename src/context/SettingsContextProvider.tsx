@@ -25,6 +25,9 @@ interface ColorsContextType {
   children: ReactNode;
 }
 
+// generatedColors: To set indices to tiles
+// editedColors: To draw on canvas
+
 export function SettingsContextProvider({ children }: ColorsContextType) {
   const { imageData, ctxRef } = useCanvasContext();
 
@@ -35,17 +38,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   const [tileAssignments, setTileAssignments] = useState<number[]>([]);
 
   //
-  // ON TILE SIZE CHANGE
-  //
-  useLayoutEffect(() => {
-    if (!imageData || generatedColors.length === 0) return;
-
-    assignColorIndexToTiles(generatedColors);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tileSize, generatedColors]);
-
-  //
-  // ON COLOR LIMIT CHANGE
+  // INITIAL COLORS + ON LIMIT CHANGE
   //
   useLayoutEffect(() => {
     if (!imageData) return;
@@ -73,17 +66,27 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
     });
   }, [editedColors, tileAssignments, tileSize, imageData, ctxRef]);
 
+  //
+  // ON TILE SIZE CHANGE
+  //
+  useLayoutEffect(() => {
+    if (!imageData || generatedColors.length === 0) return;
+
+    assignColorIndexToTiles(generatedColors);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tileSize, generatedColors]);
+
   ////////////////////////////////
   /////// HANDLERS ///////////////
   ////////////////////////////////
 
   // Update Tile Assignments: [0, 1, 0, ...] > Number of tiles
-  function assignColorIndexToTiles(centralColors: string[]) {
+  function assignColorIndexToTiles(generatedCentralColors: string[]) {
     if (!imageData) return;
 
     const newAssignments = getTileAssignments(
       imageData,
-      centralColors,
+      generatedCentralColors,
       tileSize,
     );
 

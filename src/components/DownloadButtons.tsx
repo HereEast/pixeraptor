@@ -20,25 +20,36 @@ interface DownloadSVGButtonProps extends DownloadButtonProps {
 }
 
 export function DownloadSVGButton(props: DownloadSVGButtonProps) {
+  const {
+    imageData,
+    editedColors,
+    tileSize,
+    tileAssignments,
+    filename,
+    disabled,
+    className,
+    title,
+  } = props;
+
   function handleDownloadSVG() {
-    if (!props.imageData) return;
+    if (!imageData) return;
 
     downloadSVG({
-      tileSize: props.tileSize,
-      filename: props.filename,
-      colors: props.editedColors,
-      imageData: props.imageData,
-      tileAssignments: props.tileAssignments,
+      tileSize,
+      filename,
+      colors: editedColors,
+      imageData,
+      tileAssignments,
     });
   }
 
   return (
     <Button
-      disabled={props.disabled || false}
+      disabled={disabled || false}
       onClick={handleDownloadSVG}
-      className={cn("h-20 w-full", props.className || "")}
+      className={cn("h-20 w-full", className || "")}
     >
-      {props.title || "Download .SVG"}
+      {title || "Download .SVG"}
     </Button>
   );
 }
@@ -49,19 +60,21 @@ interface DownloadPNGButtonProps extends DownloadButtonProps {
 }
 
 export function DownloadPNGButton(props: DownloadPNGButtonProps) {
-  function handleDownloadPNG() {
-    if (!props.canvasRef?.current) return;
+  const { canvasRef, filename, disabled, className, title } = props;
 
-    downloadPNG(props.canvasRef?.current, props.filename);
+  function handleDownloadPNG() {
+    if (!canvasRef?.current) return;
+
+    downloadPNG(canvasRef?.current, filename);
   }
 
   return (
     <Button
-      disabled={props.disabled || false}
+      disabled={disabled || false}
       onClick={handleDownloadPNG}
-      className={cn("h-20 w-full", props.className || "")}
+      className={cn("h-20 w-full", className || "")}
     >
-      {props.title || "Download .PNG"}
+      {title || "Download .PNG"}
     </Button>
   );
 }

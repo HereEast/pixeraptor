@@ -3,11 +3,11 @@ import { ISavedCanvas } from "~/types";
 import { useCanvasContext, useSavedCanvas, useSettingsContext } from "~/hooks";
 
 export function Canvas() {
-  const { canvasRef, isImageRestored, imageData } = useCanvasContext();
+  const { canvasRef, imageData } = useCanvasContext();
   const { editedColors, tileSize, tileAssignments } = useSettingsContext();
   const { saveCanvas, isLimit } = useSavedCanvas();
 
-  const isLoading = !isImageRestored && editedColors.length === 0;
+  const isLoading = editedColors.length === 0;
 
   // Save Canvas
   function handleSaveImage() {

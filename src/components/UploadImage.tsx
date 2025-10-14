@@ -35,7 +35,7 @@ export function UploadImage() {
         size={10}
         onChange={handleImageUpload}
         ref={fileInputRef}
-        className="hidden"
+        hidden
       />
 
       <div className="flex items-center gap-4">
