@@ -8,7 +8,7 @@ import { SavedCanvasList } from "./SavedCanvasList";
 
 import { useCanvasContext, useSettingsContext } from "~/hooks";
 
-export function PixeraptorEditor() {
+export function PixelEditor() {
   const { image, canvasRef, filename, imageData } = useCanvasContext();
   const { tileSize, editedColors, tileAssignments } = useSettingsContext();
 
