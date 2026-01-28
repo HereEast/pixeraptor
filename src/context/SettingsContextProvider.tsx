@@ -29,7 +29,7 @@ interface ColorsContextType {
 // editedColors: To draw on canvas
 
 export function SettingsContextProvider({ children }: ColorsContextType) {
-  const { imageData, ctxRef } = useCanvasContext();
+  const { imageData, canvasRef } = useCanvasContext();
 
   const [tileSize, setTileSize] = useState(DEFAULT_TILE_SIZE);
   const [colorLimit, setColorLimit] = useState(DEFAULT_COLOR_LIMIT);
@@ -55,16 +55,20 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   // ON DRAW CANVAS
   //
   useLayoutEffect(() => {
-    if (!imageData || !tileAssignments.length || !ctxRef.current) return;
+    if (!imageData || !tileAssignments.length || !canvasRef.current) return;
+
+    const ctx = canvasRef.current.getContext("2d");
+
+    if (!ctx) return;
 
     drawCanvas({
-      ctx: ctxRef.current,
+      ctx,
       imageData,
       tileAssignments,
       colors: editedColors,
       tileSize,
     });
-  }, [editedColors, tileAssignments, tileSize, imageData, ctxRef]);
+  }, [editedColors, tileAssignments, tileSize, imageData, canvasRef]);
 
   //
   // ON TILE SIZE CHANGE

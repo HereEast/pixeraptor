@@ -9,7 +9,7 @@ import {
 import { PixelEditor } from "../PixelEditor";
 import { AboutSection } from "../AboutSection";
 
-export function MainApp() {
+export function PixeraptorApp() {
   return (
     <div className="mb-12">
       <CanvasContextProvider>

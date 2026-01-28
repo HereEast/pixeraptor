@@ -64,7 +64,7 @@ async function getImageData(): Promise<ImageDataPayload | null> {
 
       const req: IDBRequest<ImageDataPayload[]> = store.getAll();
 
-      req.onsuccess = () => resolve(req.result[0] ?? null);
+      req.onsuccess = () => resolve(req.result[0] || null);
       req.onerror = () => reject(req.error);
     },
   );
