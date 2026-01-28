@@ -8,21 +8,24 @@ export function getImageData(canvas: HTMLCanvasElement, img: HTMLImageElement) {
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
 
-  const { sourceW, sourceH, sourceX, sourceY } = calculateCroppedParams(img);
+  const { sourceX, sourceY, sourceW, sourceH } = calculateCroppedParams(img);
 
+  // Draw cropped image
   ctx.drawImage(
     img,
+    // Source
     sourceX,
     sourceY,
     sourceW,
     sourceH,
+    // Destiation on canvas
     0,
     0,
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
   );
 
-  const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // RGBA[]
 
   return imageData;
 }
@@ -38,8 +41,8 @@ export function calculateCroppedParams(img: HTMLImageElement) {
 
   const aspectRatio = imageW / imageH;
 
-  let sourceW: number;
-  let sourceH: number;
+  let sourceW = 0;
+  let sourceH = 0;
   let sourceX = 0;
   let sourceY = 0;
 

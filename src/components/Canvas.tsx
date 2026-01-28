@@ -1,6 +1,7 @@
 import { Button } from "./ui/Button";
 import { ISavedCanvas } from "~/types";
 import { useCanvasContext, useSavedCanvas, useSettingsContext } from "~/hooks";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "~/constants";
 
 export function Canvas() {
   const { canvasRef, imageData } = useCanvasContext();
@@ -47,8 +48,8 @@ export function Canvas() {
 
       <canvas
         ref={canvasRef}
-        width={800}
-        height={800}
+        width={CANVAS_WIDTH}
+        height={CANVAS_HEIGHT}
         className="h-auto max-w-full"
       />
     </div>

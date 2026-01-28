@@ -42,16 +42,14 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
 
   // ON IMAGE LOAD
   useEffect(() => {
-    if (filename.includes(DEFAULT_FILENAME)) return;
+    if (!canvasRef || !image || filename.includes(DEFAULT_FILENAME)) return;
 
-    if (canvasRef && image) {
-      processLoadedImage(
-        canvasRef as RefObject<HTMLCanvasElement>,
-        image,
-        filename,
-        setImageData,
-      );
-    }
+    processLoadedImage(
+      canvasRef as RefObject<HTMLCanvasElement>,
+      image,
+      filename,
+      setImageData,
+    );
   }, [image, filename]);
 
   // UPLOAD IMAGE
