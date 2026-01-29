@@ -44,29 +44,26 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     restoreInitialImage(canvasRef, setImage, setImageData, setFilename);
   }, []);
 
-  // Image uploaded
-  useEffect(() => {
-    if (!canvasRef.current || !image || filename.includes(DEFAULT_FILENAME))
-      return;
-
-    const data = getImageData(canvasRef.current, image);
-
-    if (!data) {
-      console.error("Failed to get image data.");
-      return;
-    }
-
-    setImageData(data);
-    saveImageToDB(canvasRef.current, filename, data);
-  }, [image, filename]);
-
   // Upload image
   async function handleUpload(file: File) {
     try {
       const img = await uploadImage(file);
 
+      const tempCanvas = document.createElement("canvas");
+      const data = getImageData(tempCanvas, img);
+
+      if (!data) {
+        console.error("Failed to get image data.");
+        return;
+      }
+
       setImage(img);
       setFilename(file.name);
+      setImageData(data);
+
+      if (!file.name.includes(DEFAULT_FILENAME)) {
+        saveImageToDB(tempCanvas, file.name, data);
+      }
     } catch (error) {
       console.error("Upload failed:", error);
     }
