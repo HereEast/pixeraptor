@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 
 import { Gallery } from "./Gallery";
@@ -9,10 +9,8 @@ import { IPublicImageData } from "~/types";
 
 // About Section
 export function AboutSection() {
-  const [imagesData, setImagesData] = useState<IPublicImageData[]>([]);
-
-  useEffect(() => {
-    const imagesData = new Array(GALLERY_IMAGES_COUNT).fill(0).map((_, i) => {
+  const imagesData = useMemo<IPublicImageData[]>(() => {
+    return new Array(GALLERY_IMAGES_COUNT).fill(0).map((_, i) => {
       const imageIdx = String(i + 1).padStart(2, "0");
 
       return {
@@ -21,8 +19,6 @@ export function AboutSection() {
         id: `img-${imageIdx}`,
       };
     });
-
-    setImagesData(imagesData);
   }, []);
 
   return (
