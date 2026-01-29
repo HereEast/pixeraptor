@@ -66,7 +66,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
     return getTileAssignments(imageData, initialColors, tileSize);
   }, [imageData, initialColors, tileSize]);
 
-  // Active Colors
+  // Active Colors > NOT affected by changing tileSize
   const activeColors = useMemo(() => {
     return initialColors.map((color, idx) => colorEdits.get(idx) ?? color);
   }, [initialColors, colorEdits]);

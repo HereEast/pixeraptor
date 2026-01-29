@@ -5,11 +5,15 @@ import {
   createContext,
   useEffect,
   RefObject,
-  useCallback,
 } from "react";
 
-import { IndexedDB } from "~/db";
-import { uploadImage, restoreInitialImage, processLoadedImage } from "~/lib";
+import {
+  uploadImage,
+  restoreInitialImage,
+  saveImageToDB,
+  getImageData,
+} from "~/lib";
+
 import { DEFAULT_FILENAME } from "~/types";
 
 // Context Values
@@ -35,28 +39,30 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [filename, setFilename] = useState("");
 
-  // SET INITIAL IMAGE (Restored or default)
+  // Initial image (Restored or default)
   useEffect(() => {
     restoreInitialImage(canvasRef, setImage, setImageData, setFilename);
   }, []);
 
-  // ON IMAGE LOAD
+  // Image uploaded
   useEffect(() => {
-    if (!canvasRef || !image || filename.includes(DEFAULT_FILENAME)) return;
+    if (!canvasRef.current || !image || filename.includes(DEFAULT_FILENAME))
+      return;
 
-    processLoadedImage(
-      canvasRef as RefObject<HTMLCanvasElement>,
-      image,
-      filename,
-      setImageData,
-    );
+    const data = getImageData(canvasRef.current, image);
+
+    if (!data) {
+      console.error("Failed to get image data.");
+      return;
+    }
+
+    setImageData(data);
+    saveImageToDB(canvasRef.current, filename, data);
   }, [image, filename]);
 
-  // UPLOAD IMAGE
-  const handleUpload = useCallback(async (file: File) => {
+  // Upload image
+  async function handleUpload(file: File) {
     try {
-      await IndexedDB.clearImageData();
-
       const img = await uploadImage(file);
 
       setImage(img);
@@ -64,7 +70,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     } catch (error) {
       console.error("Upload failed:", error);
     }
-  }, []);
+  }
 
   return (
     <CanvasContext.Provider
