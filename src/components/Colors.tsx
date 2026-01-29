@@ -28,8 +28,6 @@ export function ColorPicker({ color, index }: ColorPickerProps) {
 
   // Update color
   function handleColorChange(newColor: string) {
-    if (!newColor) return;
-
     replaceColor(index, newColor);
   }
 
