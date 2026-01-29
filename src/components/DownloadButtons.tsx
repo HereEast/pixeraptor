@@ -11,7 +11,10 @@ interface DownloadButtonProps {
   className?: string;
 }
 
-// Download SVG Button
+interface DownloadPNGButtonProps extends DownloadButtonProps {
+  canvasRef: RefObject<HTMLCanvasElement | null>;
+}
+
 interface DownloadSVGButtonProps extends DownloadButtonProps {
   imageData: ImageData | null;
   editedColors: string[];
@@ -19,19 +22,17 @@ interface DownloadSVGButtonProps extends DownloadButtonProps {
   tileAssignments: number[];
 }
 
-export function DownloadSVGButton(props: DownloadSVGButtonProps) {
-  const {
-    imageData,
-    editedColors,
-    tileSize,
-    tileAssignments,
-    filename,
-    disabled,
-    className,
-    title,
-  } = props;
-
-  function handleDownloadSVG() {
+export function DownloadSVGButton({
+  imageData,
+  editedColors,
+  tileSize,
+  tileAssignments,
+  filename,
+  disabled = false,
+  className = "",
+  title = "Download .SVG",
+}: DownloadSVGButtonProps) {
+  function handleDownload() {
     if (!imageData) return;
 
     downloadSVG({
@@ -45,24 +46,24 @@ export function DownloadSVGButton(props: DownloadSVGButtonProps) {
 
   return (
     <Button
-      disabled={disabled || false}
-      onClick={handleDownloadSVG}
-      className={cn("h-20 w-full", className || "")}
+      disabled={disabled}
+      onClick={handleDownload}
+      className={cn("h-20 w-full", className)}
     >
-      {title || "Download .SVG"}
+      {title}
     </Button>
   );
 }
 
 // Download PNG Button
-interface DownloadPNGButtonProps extends DownloadButtonProps {
-  canvasRef: RefObject<HTMLCanvasElement | null>;
-}
-
-export function DownloadPNGButton(props: DownloadPNGButtonProps) {
-  const { canvasRef, filename, disabled, className, title } = props;
-
-  function handleDownloadPNG() {
+export function DownloadPNGButton({
+  canvasRef,
+  filename,
+  disabled = false,
+  className = "",
+  title = "Download .PNG",
+}: DownloadPNGButtonProps) {
+  function handleDownload() {
     if (!canvasRef?.current) return;
 
     downloadPNG(canvasRef?.current, filename);
@@ -70,11 +71,11 @@ export function DownloadPNGButton(props: DownloadPNGButtonProps) {
 
   return (
     <Button
-      disabled={disabled || false}
-      onClick={handleDownloadPNG}
-      className={cn("h-20 w-full", className || "")}
+      disabled={disabled}
+      onClick={handleDownload}
+      className={cn("h-20 w-full", className)}
     >
-      {title || "Download .PNG"}
+      {title}
     </Button>
   );
 }
