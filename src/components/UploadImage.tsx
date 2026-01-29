@@ -5,6 +5,8 @@ import { Button } from "~/components/ui/Button";
 import { useCanvasContext } from "~/hooks";
 import { cn } from "~/utils";
 
+const maxFileSize = 1000 * 1000 * 2; // 2MB
+
 export function UploadImage() {
   const { handleUpload } = useCanvasContext();
 
@@ -15,8 +17,6 @@ export function UploadImage() {
     const file = e.target.files?.[0];
 
     if (!file) return;
-
-    const maxFileSize = 1000 * 1000 * 2; // 2MB
 
     if (file.size > maxFileSize) {
       setIsSizeError(true);
@@ -32,7 +32,6 @@ export function UploadImage() {
       <input
         type="file"
         accept=".png, .jpg, .jpeg"
-        size={10}
         onChange={handleImageUpload}
         ref={fileInputRef}
         hidden
