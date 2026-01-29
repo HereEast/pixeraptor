@@ -10,9 +10,8 @@ export function getClosestCentroidIndex(
   let minDistance = Infinity;
 
   for (let i = 0; i < centroids.length; i++) {
-    const centralColor = centroids[i];
-    const centralRgb =
-      typeof centralColor === "string" ? hexToRgb(centralColor) : centralColor;
+    const c = centroids[i];
+    const centralRgb = typeof c === "string" ? hexToRgb(c) : c;
 
     const distance = getColorDistance(color, centralRgb);
 

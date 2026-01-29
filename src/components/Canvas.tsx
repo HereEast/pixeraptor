@@ -1,13 +1,14 @@
 import { Button } from "./ui/Button";
 import { ISavedCanvas } from "~/types";
 import { useCanvasContext, useSavedCanvas, useSettingsContext } from "~/hooks";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "~/constants";
 
 export function Canvas() {
   const { canvasRef, imageData } = useCanvasContext();
-  const { editedColors, tileSize, tileAssignments } = useSettingsContext();
-  const { saveCanvas, isLimit } = useSavedCanvas();
+  const { activeColors, tileSize, tileAssignments } = useSettingsContext();
+  const { saveCanvas, savedCanvases, isLimit } = useSavedCanvas();
 
-  const isLoading = editedColors.length === 0;
+  const isLoading = activeColors.length === 0;
 
   // Save Canvas
   function handleSaveCanvas() {
@@ -16,12 +17,18 @@ export function Canvas() {
     const currentCanvas: ISavedCanvas = {
       dataUrl: canvasRef.current?.toDataURL("image/png"),
       settings: {
-        colors: editedColors,
+        colors: activeColors,
         tileSize,
         tileAssignments,
         imageData,
       },
     };
+
+    if (
+      savedCanvases.some((canvas) => canvas.dataUrl === currentCanvas.dataUrl)
+    ) {
+      return;
+    }
 
     saveCanvas(currentCanvas);
   }
@@ -47,8 +54,8 @@ export function Canvas() {
 
       <canvas
         ref={canvasRef}
-        width={800}
-        height={800}
+        width={CANVAS_WIDTH}
+        height={CANVAS_HEIGHT}
         className="h-auto max-w-full"
       />
     </div>

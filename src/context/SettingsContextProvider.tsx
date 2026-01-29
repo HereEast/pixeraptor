@@ -1,12 +1,24 @@
-import { ReactNode, useState, createContext, useLayoutEffect } from "react";
+import {
+  ReactNode,
+  useState,
+  createContext,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 
-import { DEFAULT_COLOR_LIMIT, DEFAULT_TILE_SIZE } from "~/constants";
-import { drawCanvas, extractCentralColors, getTileAssignments } from "~/lib";
+import {
+  drawCanvas,
+  extractCentralColors,
+  getImageColors,
+  getTileAssignments,
+} from "~/lib";
+
 import { useCanvasContext } from "~/hooks";
+import { DEFAULT_COLOR_LIMIT, DEFAULT_TILE_SIZE } from "~/constants";
 
 // Context Values
 interface SettingsContextValueType {
-  editedColors: string[];
+  activeColors: string[];
   colorLimit: number;
   tileAssignments: number[];
   tileSize: number;
@@ -25,90 +37,65 @@ interface ColorsContextType {
   children: ReactNode;
 }
 
-// generatedColors: To set indices to tiles
-// editedColors: To draw on canvas
-
 export function SettingsContextProvider({ children }: ColorsContextType) {
-  const { imageData, ctxRef } = useCanvasContext();
+  const { imageData, canvasRef } = useCanvasContext();
 
   const [tileSize, setTileSize] = useState(DEFAULT_TILE_SIZE);
   const [colorLimit, setColorLimit] = useState(DEFAULT_COLOR_LIMIT);
-  const [editedColors, setEditedColors] = useState<string[]>([]);
-  const [generatedColors, setGeneratedColors] = useState<string[]>([]);
-  const [tileAssignments, setTileAssignments] = useState<number[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [colorEdits, setColorEdits] = useState<Map<number, string>>(new Map());
 
-  //
-  // INITIAL COLORS + ON LIMIT CHANGE
-  //
+  // Initial Colors
+  const initialColors = useMemo(() => {
+    if (!imageData) {
+      return [];
+    }
+
+    void refreshKey;
+    const imageColors = getImageColors(imageData);
+
+    return extractCentralColors(imageColors, colorLimit);
+  }, [imageData, colorLimit, refreshKey]);
+
+  // Tile Assignments > ALWAYS use initialColors [0, 1, 0, ...]
+  const tileAssignments = useMemo(() => {
+    if (!imageData || initialColors.length === 0) {
+      return [];
+    }
+
+    return getTileAssignments(imageData, initialColors, tileSize);
+  }, [imageData, initialColors, tileSize]);
+
+  // Active Colors > NOT affected by changing tileSize
+  const activeColors = useMemo(() => {
+    return initialColors.map((color, idx) => colorEdits.get(idx) ?? color);
+  }, [initialColors, colorEdits]);
+
+  // Draw to canvas
   useLayoutEffect(() => {
-    if (!imageData) return;
-
-    const initialColors = extractCentralColors(imageData, colorLimit);
-
-    setEditedColors(initialColors);
-    setGeneratedColors(initialColors);
-    assignColorIndexToTiles(initialColors);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colorLimit, imageData]);
-
-  //
-  // ON DRAW CANVAS
-  //
-  useLayoutEffect(() => {
-    if (!imageData || !tileAssignments.length || !ctxRef.current) return;
+    if (!imageData || !tileAssignments.length || !canvasRef.current) return;
 
     drawCanvas({
-      ctx: ctxRef.current,
+      ctx: canvasRef.current.getContext("2d"),
       imageData,
       tileAssignments,
-      colors: editedColors,
+      colors: activeColors,
       tileSize,
     });
-  }, [editedColors, tileAssignments, tileSize, imageData, ctxRef]);
+  }, [activeColors, tileAssignments, tileSize, imageData, canvasRef]);
 
-  //
-  // ON TILE SIZE CHANGE
-  //
-  useLayoutEffect(() => {
-    if (!imageData || generatedColors.length === 0) return;
-
-    assignColorIndexToTiles(generatedColors);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tileSize, generatedColors]);
-
-  ////////////////////////////////
-  /////// HANDLERS ///////////////
-  ////////////////////////////////
-
-  // Update Tile Assignments: [0, 1, 0, ...] > Number of tiles
-  function assignColorIndexToTiles(generatedCentralColors: string[]) {
-    if (!imageData) return;
-
-    const newAssignments = getTileAssignments(
-      imageData,
-      generatedCentralColors,
-      tileSize,
-    );
-
-    setTileAssignments(newAssignments);
-  }
-
-  // Refresh Colors
+  // Regenerate colors and clear edits
   function refreshColors() {
-    if (!imageData) return;
-
-    const newColors = extractCentralColors(imageData, colorLimit);
-
-    setEditedColors(newColors);
-    setGeneratedColors(newColors);
-    assignColorIndexToTiles(newColors);
+    setColorEdits(new Map());
+    setRefreshKey((prev) => prev + 1);
   }
 
-  // Replace Color
+  // Replace color
   function replaceColor(idx: number, value: string) {
-    setEditedColors((prev) => {
-      const colors = [...prev];
-      colors[idx] = value;
+    setColorEdits((prev) => {
+      const colors = new Map(prev);
+      colors.set(idx, value);
+
       return colors;
     });
   }
@@ -116,7 +103,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   return (
     <SettingsContext.Provider
       value={{
-        editedColors,
+        activeColors,
         colorLimit,
         tileAssignments,
         tileSize,

@@ -1,25 +1,25 @@
-import { getImageColors, getClosestCentroidIndex } from ".";
+import { getClosestCentroidIndex } from ".";
 import { getRandomColor, rgbToHex } from "~/utils";
 import { RGBColor } from "~/types";
 
 const ITERATIONS = 5;
 
-//
 // GOAL: Get centroid HEX colors using K-Means clustering
-//
+
 export function extractCentralColors(
-  imageData: ImageData,
+  imageColors: RGBColor[],
   limit: number,
 ): string[] {
-  const imageColors = getImageColors(imageData);
-
   // [[r, g, b]], [0, 1, 0, ...] > Update on every iteration
-  let centroids: RGBColor[] = getInitialCentroids(imageColors, limit);
   let assignedIndices: number[] = [];
+  let centroids: RGBColor[] = getInitialCentroids(imageColors, limit);
 
   // Clustering (K-Means)
   for (let iteration = 0; iteration < ITERATIONS; iteration++) {
-    assignedIndices = assignCentroidIndicesToColors(imageColors, centroids);
+    assignedIndices = assignCentroidIndicesToImageColors(
+      imageColors,
+      centroids,
+    );
     centroids = updateCentroids(imageColors, centroids, assignedIndices);
   }
 
@@ -28,7 +28,8 @@ export function extractCentralColors(
   return hexColors;
 }
 
-// Update centroids
+// For each centroid, calculate the average color of all pixels assigned to it
+
 function updateCentroids(
   imageColors: RGBColor[],
   centroids: RGBColor[],
@@ -73,8 +74,9 @@ function updateCentroids(
   return updatedCentroids;
 }
 
-// Which centroid is the closest to each color
-function assignCentroidIndicesToColors(
+// For each pixel in the image, find which centroid (color) is closest > [0, 2, 1, 0, 1, ...]
+
+function assignCentroidIndicesToImageColors(
   imageColors: RGBColor[],
   centroids: RGBColor[],
 ) {
@@ -92,7 +94,7 @@ function assignCentroidIndicesToColors(
   return assignedIndices;
 }
 
-// Get initial centroids
+// Get initial centroids (randomly)
 export function getInitialCentroids(colors: RGBColor[], limit: number) {
   const centroids: RGBColor[] = [];
   const usedIndexes = new Set<number>();

@@ -12,15 +12,14 @@ interface Props {
 }
 
 // Download SVG
-export function downloadSVG(props: Props) {
-  const { tileSize, colors, imageData, tileAssignments, filename } = props;
-
-  const svg = generateSVG({
-    tileSize,
-    colors,
-    imageData,
-    tileAssignments,
-  });
+export function downloadSVG({
+  tileSize,
+  colors,
+  imageData,
+  tileAssignments,
+  filename,
+}: Props) {
+  const svg = generateSVG({ tileSize, colors, imageData, tileAssignments });
 
   if (!svg) return;
 
@@ -29,21 +28,14 @@ export function downloadSVG(props: Props) {
   downloadBlob(blob, `${filename}.svg`);
 }
 
-// Download PNG
-export function downloadPNG(canvas: HTMLCanvasElement, filename: string) {
-  canvas.toBlob((blob) => {
-    if (!blob) return;
-
-    downloadBlob(blob, `pixeraptor-${filename}.png`);
-  }, "image/png");
-}
-
 // Generate SVG
 export function generateSVG(props: Props) {
   const { tileSize, colors, imageData, tileAssignments } = props;
 
+  // Use Context from svgcanvas lib
   const ctx = new Context(CANVAS_WIDTH, CANVAS_HEIGHT);
 
+  // Draw canvas with svgcanvas lib Context
   drawCanvas({
     ctx,
     imageData,
@@ -53,6 +45,15 @@ export function generateSVG(props: Props) {
   });
 
   return ctx.getSerializedSvg();
+}
+
+// Download PNG
+export function downloadPNG(canvas: HTMLCanvasElement, filename: string) {
+  canvas.toBlob((blob) => {
+    if (!blob) return;
+
+    downloadBlob(blob, `pixeraptor-${filename}.png`);
+  }, "image/png");
 }
 
 // Download Blob

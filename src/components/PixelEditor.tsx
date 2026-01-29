@@ -10,7 +10,7 @@ import { useCanvasContext, useSettingsContext } from "~/hooks";
 
 export function PixelEditor() {
   const { image, canvasRef, filename, imageData } = useCanvasContext();
-  const { tileSize, editedColors, tileAssignments } = useSettingsContext();
+  const { tileSize, activeColors, tileAssignments } = useSettingsContext();
 
   return (
     <section className="mb-24">
@@ -33,7 +33,7 @@ export function PixelEditor() {
 
                   <DownloadSVGButton
                     tileSize={tileSize}
-                    editedColors={editedColors}
+                    activeColors={activeColors}
                     imageData={imageData}
                     tileAssignments={tileAssignments}
                     filename={filename}

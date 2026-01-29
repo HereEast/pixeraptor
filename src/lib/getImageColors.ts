@@ -19,13 +19,13 @@ export function getImageColors(imageData: ImageData): RGBColor[] {
       const g = data[pixelIndex + 1];
       const b = data[pixelIndex + 2];
 
-      const value = `${r},${g},${b}`;
+      const value = `${r}-${g}-${b}`;
       uniqueColors.add(value);
     }
   }
 
   const imageColors = Array.from(uniqueColors).map(
-    (value) => value.split(",").map(Number) as RGBColor,
+    (value) => value.split("-").map(Number) as RGBColor,
   );
 
   return imageColors;

@@ -1,4 +1,4 @@
-import { ReactNode, useState, createContext, useEffect } from "react";
+import { ReactNode, useState, createContext, useMemo } from "react";
 
 import { SAVED_CANVAS_LIMIT } from "~/constants";
 import { ISavedCanvas } from "~/types";
@@ -21,27 +21,16 @@ interface SavedCanvasProviderProps {
 // Provider
 export function SavedCanvasProvider({ children }: SavedCanvasProviderProps) {
   const [savedCanvases, setSavedCanvases] = useState<ISavedCanvas[]>([]);
-  const [isLimit, setIsLimit] = useState(false);
 
-  useEffect(() => {
-    if (savedCanvases.length >= SAVED_CANVAS_LIMIT) {
-      setIsLimit(true);
-    } else {
-      setIsLimit(false);
-    }
+  const isLimit = useMemo(() => {
+    return savedCanvases.length >= SAVED_CANVAS_LIMIT;
   }, [savedCanvases]);
-
-  ////////////////////////////////
-  /////// HANDLERS ///////////////
-  ////////////////////////////////
 
   // Save Canvas
   function saveCanvas(canvasState: ISavedCanvas) {
-    if (isLimit) {
-      return;
+    if (!isLimit) {
+      setSavedCanvases([...savedCanvases, canvasState]);
     }
-
-    setSavedCanvases([...savedCanvases, canvasState]);
   }
 
   // Remove Canvas

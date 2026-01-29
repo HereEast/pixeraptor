@@ -1,5 +1,5 @@
-import { MainApp } from "~/components/pages/MainApp";
+import { PixeraptorApp } from "~/components/pages/PixeraptorApp";
 
-export default function MainPage() {
-  return <MainApp />;
+export default function PixeraptorPage() {
+  return <PixeraptorApp />;
 }

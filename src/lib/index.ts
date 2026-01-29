@@ -6,3 +6,5 @@ export * from "./getImageColors";
 export * from "./getImageData";
 export * from "./uploadImage";
 export * from "./getClosestCentroidIndex";
+export * from "./restoreInitialImage";
+export * from "./saveImageToDB";

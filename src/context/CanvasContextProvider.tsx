@@ -5,16 +5,20 @@ import {
   createContext,
   useEffect,
   RefObject,
-  useCallback,
 } from "react";
 
-import { IndexedDB } from "~/db";
-import { getImageData, uploadImage } from "~/lib";
+import {
+  uploadImage,
+  restoreInitialImage,
+  saveImageToDB,
+  getImageData,
+} from "~/lib";
+
+import { DEFAULT_FILENAME } from "~/types";
 
 // Context Values
 interface CanvasContextValueType {
   canvasRef: RefObject<HTMLCanvasElement | null>;
-  ctxRef: RefObject<CanvasRenderingContext2D | null>;
   image: HTMLImageElement | null;
   imageData: ImageData | null;
   filename: string;
@@ -28,127 +32,37 @@ interface ImageContextProviderProps {
   children: ReactNode;
 }
 
-const DEFAULT_FILENAME = "pixeraptor-00-image-00";
-
 export function CanvasContextProvider({ children }: ImageContextProviderProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [filename, setFilename] = useState("");
 
-  // CANVAS
+  // Initial image (Restored or default)
   useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) return;
-
-    ctxRef.current = ctx;
-  }, [canvasRef]);
-
-  // RESTORE DATA FROM DB
-  useEffect(() => {
-    async function restoreFromIndexedDB() {
-      const savedImageData = await IndexedDB.getImageData();
-
-      // DB Image exists
-      if (savedImageData) {
-        const imageUrl = URL.createObjectURL(savedImageData.imageBlob);
-        const restoredImage = new Image();
-
-        restoredImage.onload = () => {
-          setImage(restoredImage);
-          setImageData(savedImageData.imageData);
-          setFilename(savedImageData.filename);
-
-          URL.revokeObjectURL(imageUrl);
-        };
-
-        restoredImage.onerror = () => {
-          console.error("Failed to load restored image");
-
-          URL.revokeObjectURL(imageUrl);
-        };
-
-        restoredImage.src = imageUrl;
-      } else {
-        // Default Image
-        const defaultImage = new Image();
-
-        defaultImage.onload = () => {
-          if (!canvasRef.current) return;
-
-          const defaultImageData = getImageData(
-            canvasRef.current,
-            defaultImage,
-          );
-
-          if (!defaultImageData) return;
-
-          setImage(defaultImage);
-          setImageData(defaultImageData);
-          setFilename(DEFAULT_FILENAME);
-        };
-
-        defaultImage.src = `/assets/images/${DEFAULT_FILENAME}.png`;
-
-        defaultImage.onerror = () => {
-          console.error("Failed to load default image");
-        };
-      }
-    }
-
-    restoreFromIndexedDB();
+    restoreInitialImage(canvasRef, setImage, setImageData, setFilename);
   }, []);
 
-  // ON IMAGE LOAD
+  // Image uploaded
   useEffect(() => {
-    if (filename.includes(DEFAULT_FILENAME)) return;
+    if (!canvasRef.current || !image || filename.includes(DEFAULT_FILENAME))
+      return;
 
-    async function processImageData() {
-      const canvas = canvasRef.current;
+    const data = getImageData(canvasRef.current, image);
 
-      if (!canvas || !image) return;
-
-      const data = getImageData(canvas, image);
-
-      if (!data) {
-        console.error("Failed to get image data.");
-        return;
-      }
-
-      setImageData(data);
-
-      // SAVE DATA TO DB
-      canvas.toBlob(async (blob) => {
-        if (blob) {
-          try {
-            await IndexedDB.saveImageData({
-              filename,
-              imageData: data,
-              imageBlob: blob,
-            });
-          } catch (error) {
-            console.error("Failed to save image data:", error);
-          }
-        }
-      });
+    if (!data) {
+      console.error("Failed to get image data.");
+      return;
     }
 
-    processImageData();
+    setImageData(data);
+    saveImageToDB(canvasRef.current, filename, data);
   }, [image, filename]);
 
-  ////////////////////////////////
-  /////// HANDLERS ///////////////
-  ////////////////////////////////
-
-  // UPLOAD IMAGE
-  const handleUpload = useCallback(async (file: File) => {
+  // Upload image
+  async function handleUpload(file: File) {
     try {
-      await IndexedDB.clearImageData();
-
       const img = await uploadImage(file);
 
       setImage(img);
@@ -156,7 +70,7 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
     } catch (error) {
       console.error("Upload failed:", error);
     }
-  }, []);
+  }
 
   return (
     <CanvasContext.Provider
@@ -165,7 +79,6 @@ export function CanvasContextProvider({ children }: ImageContextProviderProps) {
         image,
         imageData,
         filename,
-        ctxRef,
         handleUpload,
       }}
     >

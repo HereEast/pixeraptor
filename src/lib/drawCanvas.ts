@@ -1,7 +1,7 @@
 import { Context } from "svgcanvas";
 
 interface DrawCanvasProps {
-  ctx: CanvasRenderingContext2D | Context;
+  ctx: CanvasRenderingContext2D | Context | null;
   imageData: ImageData;
   tileAssignments: number[];
   colors: string[];
@@ -10,6 +10,8 @@ interface DrawCanvasProps {
 
 export function drawCanvas(props: DrawCanvasProps) {
   const { ctx, imageData, tileAssignments, colors, tileSize } = props;
+
+  if (!ctx) return;
 
   const cols = Math.ceil(imageData.width / tileSize);
   const rows = Math.ceil(imageData.height / tileSize);
