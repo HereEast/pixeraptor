@@ -4,11 +4,11 @@ import { useSettingsContext } from "~/hooks";
 import { cn } from "~/utils";
 
 export function Colors() {
-  const { editedColors } = useSettingsContext();
+  const { activeColors } = useSettingsContext();
 
   return (
     <div className="flex flex-wrap gap-1">
-      {editedColors.map((color, index) => (
+      {activeColors.map((color, index) => (
         <ColorPicker key={`color-${index}`} color={color} index={index} />
       ))}
     </div>

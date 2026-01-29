@@ -18,7 +18,7 @@ import { DEFAULT_COLOR_LIMIT, DEFAULT_TILE_SIZE } from "~/constants";
 
 // Context Values
 interface SettingsContextValueType {
-  editedColors: string[];
+  activeColors: string[];
   colorLimit: number;
   tileAssignments: number[];
   tileSize: number;
@@ -103,7 +103,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
   return (
     <SettingsContext.Provider
       value={{
-        editedColors: activeColors,
+        activeColors,
         colorLimit,
         tileAssignments,
         tileSize,

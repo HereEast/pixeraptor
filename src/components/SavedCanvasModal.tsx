@@ -62,7 +62,7 @@ export function SavedCanvasModal({
 
           <DownloadSVGButton
             tileSize={item.settings.tileSize}
-            editedColors={item.settings.colors}
+            activeColors={item.settings.colors}
             imageData={item.settings.imageData}
             tileAssignments={item.settings.tileAssignments}
             filename={filename}

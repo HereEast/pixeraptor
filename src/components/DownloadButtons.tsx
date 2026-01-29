@@ -17,14 +17,14 @@ interface DownloadPNGButtonProps extends DownloadButtonProps {
 
 interface DownloadSVGButtonProps extends DownloadButtonProps {
   imageData: ImageData | null;
-  editedColors: string[];
+  activeColors: string[];
   tileSize: number;
   tileAssignments: number[];
 }
 
 export function DownloadSVGButton({
   imageData,
-  editedColors,
+  activeColors,
   tileSize,
   tileAssignments,
   filename,
@@ -38,7 +38,7 @@ export function DownloadSVGButton({
     downloadSVG({
       tileSize,
       filename,
-      colors: editedColors,
+      colors: activeColors,
       imageData,
       tileAssignments,
     });

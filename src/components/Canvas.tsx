@@ -5,10 +5,10 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH } from "~/constants";
 
 export function Canvas() {
   const { canvasRef, imageData } = useCanvasContext();
-  const { editedColors, tileSize, tileAssignments } = useSettingsContext();
+  const { activeColors, tileSize, tileAssignments } = useSettingsContext();
   const { saveCanvas, isLimit } = useSavedCanvas();
 
-  const isLoading = editedColors.length === 0;
+  const isLoading = activeColors.length === 0;
 
   // Save Canvas
   function handleSaveCanvas() {
@@ -17,7 +17,7 @@ export function Canvas() {
     const currentCanvas: ISavedCanvas = {
       dataUrl: canvasRef.current?.toDataURL("image/png"),
       settings: {
-        colors: editedColors,
+        colors: activeColors,
         tileSize,
         tileAssignments,
         imageData,
