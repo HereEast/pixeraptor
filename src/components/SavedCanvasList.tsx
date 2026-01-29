@@ -5,7 +5,6 @@ import { useSavedCanvas } from "~/hooks";
 
 // Delete from the Popup
 // List saved canvases in the popup
-// If this exact canvas already saved, don't show it in the list
 
 export function SavedCanvasList() {
   const { savedCanvases, removeCanvas } = useSavedCanvas();
