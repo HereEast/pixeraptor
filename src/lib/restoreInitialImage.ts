@@ -8,16 +8,6 @@ export async function restoreInitialImage(
   setImageData: (data: ImageData) => void,
   setFilename: (filename: string) => void,
 ) {
-  function setInitialImage(
-    image: HTMLImageElement,
-    imageData: ImageData,
-    filename: string,
-  ) {
-    setImage(image);
-    setImageData(imageData);
-    setFilename(filename);
-  }
-
   const savedImageData = await IndexedDB.getImageData();
 
   // DB Image exists
@@ -26,11 +16,9 @@ export async function restoreInitialImage(
     const restoredImage = new Image();
 
     restoredImage.onload = () => {
-      setInitialImage(
-        restoredImage,
-        savedImageData.imageData,
-        savedImageData.filename,
-      );
+      setImage(restoredImage);
+      setImageData(savedImageData.imageData);
+      setFilename(savedImageData.filename);
 
       URL.revokeObjectURL(imageUrl);
     };
@@ -53,7 +41,9 @@ export async function restoreInitialImage(
 
       if (!defaultImageData) return;
 
-      setInitialImage(defaultImage, defaultImageData, DEFAULT_FILENAME);
+      setImage(defaultImage);
+      setImageData(defaultImageData);
+      setFilename(DEFAULT_FILENAME);
     };
 
     defaultImage.src = `/assets/images/${DEFAULT_FILENAME}.png`;
