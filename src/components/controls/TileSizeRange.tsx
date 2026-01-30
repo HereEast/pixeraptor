@@ -1,11 +1,13 @@
 import { InputRange } from "../ui/InputRange";
 
 import { MIN_TILE_SIZE, MAX_TILE_SIZE, TILE_SIZE_STEP } from "~/constants";
-import { useSettingsContext } from "~/hooks";
 
-export function TileSizeRange() {
-  const { tileSize, setTileSize } = useSettingsContext();
+interface TileSizeRangeProps {
+  tileSize: number;
+  setTileSize: (tileSize: number) => void;
+}
 
+export function TileSizeRange({ tileSize, setTileSize }: TileSizeRangeProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 text-sm font-semibold uppercase">
