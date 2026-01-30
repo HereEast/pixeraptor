@@ -1,4 +1,4 @@
-import { InputRange } from "./ui/InputRange";
+import { InputRange } from "../ui/InputRange";
 
 import { MIN_TILE_SIZE, MAX_TILE_SIZE, TILE_SIZE_STEP } from "~/constants";
 import { useSettingsContext } from "~/hooks";

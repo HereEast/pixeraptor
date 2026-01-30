@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from "./Canvas";
-import { Controls } from "./Controls";
+import { Controls } from "./controls/Controls";
 import { UploadImage } from "./UploadImage";
 import { DownloadPNGButton, DownloadSVGButton } from "./DownloadButtons";
 import { SavedCanvasList } from "./SavedCanvasList";

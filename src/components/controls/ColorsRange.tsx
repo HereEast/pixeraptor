@@ -1,5 +1,5 @@
-import { InputRange } from "./ui/InputRange";
-import { Button } from "./ui/Button";
+import { InputRange } from "../ui/InputRange";
+import { Button } from "../ui/Button";
 
 import { MIN_COLOR_LIMIT, MAX_COLOR_LIMIT } from "~/constants";
 import { useSettingsContext } from "~/hooks/useSettingsContext";
