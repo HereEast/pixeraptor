@@ -44,7 +44,9 @@ export function PixelEditor() {
           </div>
 
           {/* 2 */}
-          <div className="md:mt-12">{image && <Controls />}</div>
+          <div className="md:mt-12">
+            <Controls />
+          </div>
         </div>
 
         {/* Saved List */}
