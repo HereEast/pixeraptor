@@ -5,6 +5,7 @@ interface InputRangeProps {
   max: number;
   value: number;
   step?: number;
+  disabled?: boolean;
   onChange: (value: number) => void;
   className?: string;
 }
@@ -14,6 +15,7 @@ export function InputRange({
   max,
   value,
   step = 1,
+  disabled = false,
   onChange,
   className = "",
 }: InputRangeProps) {
@@ -24,11 +26,9 @@ export function InputRange({
       max={max}
       step={step}
       value={value}
+      disabled={disabled}
       onChange={(e) => onChange(parseInt(e.target.value))}
-      className={cn(
-        "h-0.5 w-full cursor-pointer appearance-none bg-zinc-200",
-        className,
-      )}
+      className={cn("h-0.5 w-full appearance-none bg-zinc-200", className)}
     />
   );
 }
