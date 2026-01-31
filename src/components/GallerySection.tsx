@@ -1,14 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 
-import { Gallery } from "./Gallery";
+import { Skeleton } from "./ui/Skeleton";
+
 import { CONTACT, GALLERY_IMAGES_COUNT, ABOUT_FEATURES } from "~/constants";
 import { IPublicImageData } from "~/types";
+import { cn } from "~/utils";
 
 // About Section
-export function AboutSection() {
+export function GallerySection() {
   const imagesData = useMemo<IPublicImageData[]>(() => {
     return new Array(GALLERY_IMAGES_COUNT).fill(0).map((_, i) => {
       const imageIdx = String(i + 1).padStart(2, "0");
@@ -33,6 +35,61 @@ export function AboutSection() {
 
       <div className="hidden md:block" />
     </section>
+  );
+}
+
+// Gallery
+interface GalleryProps {
+  imagesData: IPublicImageData[];
+  className?: string;
+}
+
+export function Gallery({ imagesData, className }: GalleryProps) {
+  return (
+    <div>
+      <ul
+        className={cn(
+          "grid grid-cols-3 gap-2 md:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]",
+          className,
+        )}
+      >
+        {imagesData.length === 0 &&
+          Array.from({ length: imagesData.length }).map((_, i) => (
+            <li key={i}>
+              <Skeleton />
+            </li>
+          ))}
+
+        {imagesData.map((image) => (
+          <ImageItem key={image.id} image={image} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Image Item
+interface ImageItemProps {
+  image: IPublicImageData;
+}
+
+function ImageItem({ image }: ImageItemProps) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return null;
+  }
+
+  return (
+    <li>
+      <Image
+        src={image.src}
+        alt={image.alt}
+        width={400}
+        height={400}
+        onError={() => setHasError(true)}
+      />
+    </li>
   );
 }
 
