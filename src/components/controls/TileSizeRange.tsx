@@ -1,26 +1,21 @@
 import { InputRange } from "../ui/InputRange";
 
+import { MIN_TILE_SIZE, MAX_TILE_SIZE, TILE_SIZE_STEP } from "~/constants";
+import { useCanvasContext, useSettingsContext } from "~/hooks";
 import { cn } from "~/utils";
 
-import { MIN_TILE_SIZE, MAX_TILE_SIZE, TILE_SIZE_STEP } from "~/constants";
+export function TileSizeRange() {
+  const { image } = useCanvasContext();
+  const { tileSize, setTileSize } = useSettingsContext();
 
-interface TileSizeRangeProps {
-  tileSize: number;
-  setTileSize: (tileSize: number) => void;
-  disabled?: boolean;
-}
+  const isDisabled = !image;
 
-export function TileSizeRange({
-  tileSize,
-  setTileSize,
-  disabled,
-}: TileSizeRangeProps) {
   return (
     <div className="flex flex-col gap-4">
       <div
         className={cn(
           "flex items-center gap-2 text-sm font-semibold uppercase",
-          disabled && "opacity-50",
+          isDisabled && "opacity-50",
         )}
       >
         <span>Tile</span>
@@ -33,7 +28,7 @@ export function TileSizeRange({
           max={MAX_TILE_SIZE}
           value={tileSize}
           step={TILE_SIZE_STEP}
-          disabled={disabled}
+          disabled={isDisabled}
           onChange={setTileSize}
         />
       </div>

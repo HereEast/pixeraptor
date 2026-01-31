@@ -5,20 +5,12 @@ import { ColorsRange } from "./ColorsRange";
 import { Colors } from "./Colors";
 
 import { cn } from "~/utils";
-import { useCanvasContext, useSettingsContext } from "~/hooks";
 
 export function Controls() {
-  const { image } = useCanvasContext();
-  const { tileSize, setTileSize } = useSettingsContext();
-
   return (
     <div className="flex w-full flex-col gap-2">
       <ControlContainer>
-        <TileSizeRange
-          tileSize={tileSize}
-          setTileSize={setTileSize}
-          disabled={!image}
-        />
+        <TileSizeRange />
       </ControlContainer>
 
       <ControlContainer className="gap-6">
