@@ -24,22 +24,22 @@ export function PixelEditor() {
             <div className="flex flex-col gap-6">
               <Canvas />
 
-              {image && (
-                <div className="flex flex-col gap-2 lg:flex-row">
-                  <DownloadPNGButton
-                    canvasRef={canvasRef}
-                    filename={filename}
-                  />
+              <div className="flex flex-col gap-2 lg:flex-row">
+                <DownloadPNGButton
+                  canvasRef={canvasRef}
+                  filename={filename}
+                  disabled={!image}
+                />
 
-                  <DownloadSVGButton
-                    tileSize={tileSize}
-                    activeColors={activeColors}
-                    imageData={imageData}
-                    tileAssignments={tileAssignments}
-                    filename={filename}
-                  />
-                </div>
-              )}
+                <DownloadSVGButton
+                  tileSize={tileSize}
+                  activeColors={activeColors}
+                  imageData={imageData}
+                  tileAssignments={tileAssignments}
+                  filename={filename}
+                  disabled={!image}
+                />
+              </div>
             </div>
           </div>
 
