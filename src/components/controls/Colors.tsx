@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useCanvasContext, useSettingsContext } from "~/hooks";
 import { cn, generatePlaceholderColors } from "~/utils";
 
-const PLACEHOLDER_COLORS_LENGTH = 10;
+const PLACEHOLDER_COLORS_COUNT = 10;
 
 export function Colors() {
   const { image } = useCanvasContext();
@@ -12,7 +12,7 @@ export function Colors() {
   const isDisabled = !image;
 
   const colors = isDisabled
-    ? generatePlaceholderColors(PLACEHOLDER_COLORS_LENGTH)
+    ? generatePlaceholderColors(PLACEHOLDER_COLORS_COUNT)
     : activeColors;
 
   return (
