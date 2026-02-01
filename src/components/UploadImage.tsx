@@ -8,7 +8,7 @@ import { cn } from "~/utils";
 const maxFileSize = 1000 * 1000 * 2; // 2MB
 
 export function UploadImage() {
-  const { handleUpload } = useCanvasContext();
+  const { handleUpload, image } = useCanvasContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSizeError, setIsSizeError] = useState(false);
@@ -41,6 +41,7 @@ export function UploadImage() {
         <Button
           onClick={() => fileInputRef.current?.click()}
           className="text-sm"
+          disabled={!image}
         >
           Upload Image
         </Button>
