@@ -7,10 +7,11 @@ import { useCanvasContext } from "~/hooks";
 import { ControlsTitle } from "./ControlsTitle";
 
 export function ColorsRange() {
-  const { image } = useCanvasContext();
-  const { colorLimit, setColorLimit, refreshColors } = useSettingsContext();
+  // const { image, isImageRestoring } = useCanvasContext();
+  const { colorLimit, setColorLimit, refreshColors, isColorsLoading } =
+    useSettingsContext();
 
-  const isDisabled = !image;
+  // const isDisabled = isColorsLoading;
 
   return (
     <div className="space-y-4">
@@ -18,12 +19,12 @@ export function ColorsRange() {
         <ControlsTitle
           title="Colors"
           value={String(colorLimit).padStart(2, "0")}
-          isDisabled={isDisabled}
+          isDisabled={isColorsLoading}
         />
 
         <Button
           onClick={refreshColors}
-          disabled={isDisabled}
+          disabled={isColorsLoading}
           className="absolute right-0 size-7 px-0 text-xs uppercase"
         >
           Re
@@ -35,7 +36,7 @@ export function ColorsRange() {
           min={MIN_COLOR_LIMIT}
           max={MAX_COLOR_LIMIT}
           value={colorLimit}
-          disabled={isDisabled}
+          disabled={isColorsLoading}
           onChange={setColorLimit}
         />
       </div>

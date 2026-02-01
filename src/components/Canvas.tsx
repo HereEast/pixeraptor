@@ -9,7 +9,7 @@ export function Canvas() {
   const { activeColors, tileSize, tileAssignments } = useSettingsContext();
   const { saveCanvas, savedCanvases, isLimit } = useSavedCanvas();
 
-  const isLoading = activeColors.length === 0;
+  // const isLoading = activeColors.length === 0;
 
   // Save Canvas
   function handleSaveCanvas() {
@@ -36,13 +36,13 @@ export function Canvas() {
 
   return (
     <div className="relative">
-      {isLoading && (
+      {activeColors.length === 0 && (
         <div className="absolute inset-0 flex aspect-square max-w-[800px] items-center justify-center bg-zinc-200">
           <span className="text-center text-sm">Loading...</span>
         </div>
       )}
 
-      {!isLoading && (
+      {activeColors.length > 0 && (
         <Button
           size="icon"
           disabled={isLimit}

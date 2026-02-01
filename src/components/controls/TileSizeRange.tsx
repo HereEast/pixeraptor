@@ -5,17 +5,15 @@ import { MIN_TILE_SIZE, MAX_TILE_SIZE, TILE_SIZE_STEP } from "~/constants";
 import { useCanvasContext, useSettingsContext } from "~/hooks";
 
 export function TileSizeRange() {
-  const { image } = useCanvasContext();
-  const { tileSize, setTileSize } = useSettingsContext();
-
-  const isDisabled = !image;
+  // const { image, isImageRestoring } = useCanvasContext();
+  const { tileSize, setTileSize, isColorsLoading } = useSettingsContext();
 
   return (
     <div className="flex flex-col gap-4">
       <ControlsTitle
         title="Tile"
         value={String(tileSize)}
-        isDisabled={isDisabled}
+        isDisabled={isColorsLoading}
       />
 
       <div className="flex items-center gap-4">
@@ -24,7 +22,7 @@ export function TileSizeRange() {
           max={MAX_TILE_SIZE}
           value={tileSize}
           step={TILE_SIZE_STEP}
-          disabled={isDisabled}
+          disabled={isColorsLoading}
           onChange={setTileSize}
         />
       </div>

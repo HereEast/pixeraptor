@@ -6,12 +6,12 @@ import { cn, generatePlaceholderColors } from "~/utils";
 const PLACEHOLDER_COLORS_COUNT = 10;
 
 export function Colors() {
-  const { image } = useCanvasContext();
-  const { activeColors } = useSettingsContext();
+  // const { image, isImageRestoring } = useCanvasContext();
+  const { activeColors, isColorsLoading } = useSettingsContext();
 
-  const isDisabled = !image;
+  // const isDisabled = !image;
 
-  const colors = isDisabled
+  const colors = isColorsLoading
     ? generatePlaceholderColors(PLACEHOLDER_COLORS_COUNT)
     : activeColors;
 
@@ -22,7 +22,7 @@ export function Colors() {
           key={`color-${index}`}
           index={index}
           color={color}
-          isDisabled={isDisabled}
+          isDisabled={isColorsLoading}
         />
       ))}
     </div>
