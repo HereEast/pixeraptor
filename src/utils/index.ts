@@ -4,6 +4,27 @@ import { clsx, type ClassValue } from "clsx";
 import { RGBColor } from "~/types";
 import { FALLBACK_COLOR } from "~/constants";
 
+// Generate random BW Colors
+export function generatePlaceholderColors(length: number) {
+  const arr = [17, 111, 85, 153, 187, 221, 65, 119];
+
+  let values: number[] = [];
+
+  if (length <= arr.length) {
+    values = arr.slice(0, length);
+  } else {
+    const count = Math.floor(length / arr.length);
+    const remainderCount = length % arr.length;
+
+    const fullArrays = Array(count).fill(arr);
+    const remainedArray = arr.slice(0, remainderCount);
+
+    values = [...fullArrays.flat(), ...remainedArray];
+  }
+
+  return values.map((value) => rgbToHex([value, value, value]));
+}
+
 // Get random color
 export function getRandomColor(colors: RGBColor[]): RGBColor {
   if (colors.length === 0) {
