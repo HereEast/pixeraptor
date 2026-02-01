@@ -1,15 +1,29 @@
 import { useState } from "react";
 
-import { useSettingsContext } from "~/hooks";
-import { cn } from "~/utils";
+import { useCanvasContext, useSettingsContext } from "~/hooks";
+import { cn, generatePlaceholderColors } from "~/utils";
+
+const PLACEHOLDER_COLORS_LENGTH = 10;
 
 export function Colors() {
+  const { image } = useCanvasContext();
   const { activeColors } = useSettingsContext();
+
+  const isDisabled = !image;
+
+  const colors = isDisabled
+    ? generatePlaceholderColors(PLACEHOLDER_COLORS_LENGTH)
+    : activeColors;
 
   return (
     <div className="flex flex-wrap gap-1">
-      {activeColors.map((color, index) => (
-        <ColorPicker key={`color-${index}`} color={color} index={index} />
+      {colors.map((color, index) => (
+        <ColorPicker
+          key={`color-${index}`}
+          index={index}
+          color={color}
+          isDisabled={isDisabled}
+        />
       ))}
     </div>
   );
@@ -17,11 +31,12 @@ export function Colors() {
 
 // Color Picker
 interface ColorPickerProps {
-  color: string;
   index: number;
+  color: string;
+  isDisabled?: boolean;
 }
 
-export function ColorPicker({ color, index }: ColorPickerProps) {
+export function ColorPicker({ color, index, isDisabled }: ColorPickerProps) {
   const { replaceColor } = useSettingsContext();
 
   const [isFocused, setIsFocused] = useState(false);
@@ -39,9 +54,10 @@ export function ColorPicker({ color, index }: ColorPickerProps) {
         onChange={(e) => handleColorChange(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        disabled={isDisabled}
         className={cn(
-          isFocused && "scale-110",
-          !isFocused && "hover:scale-110",
+          !isDisabled && isFocused && "scale-110",
+          !isDisabled && !isFocused && "hover:scale-110",
           "transition",
         )}
         style={{

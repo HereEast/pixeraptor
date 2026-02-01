@@ -10,7 +10,7 @@ export function ColorsRange() {
   const { image } = useCanvasContext();
   const { colorLimit, setColorLimit, refreshColors } = useSettingsContext();
 
-  const isDisabled = !!image;
+  const isDisabled = !image;
 
   return (
     <div className="space-y-4">
