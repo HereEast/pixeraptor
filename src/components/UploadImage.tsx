@@ -9,7 +9,7 @@ const maxFileSize = 1000 * 1000 * 2; // 2MB
 
 export function UploadImage() {
   const { handleUpload } = useCanvasContext();
-  const { isColorsLoading } = useSettingsContext();
+  const { isLoadingData } = useSettingsContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSizeError, setIsSizeError] = useState(false);
@@ -35,7 +35,7 @@ export function UploadImage() {
         accept=".png, .jpg, .jpeg"
         onChange={handleImageUpload}
         ref={fileInputRef}
-        disabled={isColorsLoading}
+        disabled={isLoadingData}
         hidden
       />
 
@@ -43,7 +43,7 @@ export function UploadImage() {
         <Button
           onClick={() => fileInputRef.current?.click()}
           className="text-sm"
-          disabled={isColorsLoading}
+          disabled={isLoadingData}
         >
           Upload Image
         </Button>

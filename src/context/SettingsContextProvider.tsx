@@ -22,7 +22,7 @@ interface SettingsContextValueType {
   colorLimit: number;
   tileAssignments: number[];
   tileSize: number;
-  isColorsLoading: boolean;
+  isLoadingData: boolean;
   setTileSize: (size: number) => void;
   setColorLimit: (colorLimit: number) => void;
   replaceColor: (idx: number, value: string) => void;
@@ -72,8 +72,8 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
     return initialColors.map((color, idx) => colorEdits.get(idx) ?? color);
   }, [initialColors, colorEdits]);
 
-  // Check if colors are loading
-  const isColorsLoading = useMemo(() => {
+  // Check loading
+  const isLoadingData = useMemo(() => {
     return activeColors.length === 0;
   }, [activeColors]);
 
@@ -113,7 +113,7 @@ export function SettingsContextProvider({ children }: ColorsContextType) {
         colorLimit,
         tileAssignments,
         tileSize,
-        isColorsLoading,
+        isLoadingData,
         setTileSize,
         setColorLimit,
         replaceColor,

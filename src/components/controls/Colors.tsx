@@ -1,17 +1,14 @@
 import { useState } from "react";
 
-import { useCanvasContext, useSettingsContext } from "~/hooks";
+import { useSettingsContext } from "~/hooks";
 import { cn, generatePlaceholderColors } from "~/utils";
 
 const PLACEHOLDER_COLORS_COUNT = 10;
 
 export function Colors() {
-  // const { image, isImageRestoring } = useCanvasContext();
-  const { activeColors, isColorsLoading } = useSettingsContext();
+  const { activeColors, isLoadingData } = useSettingsContext();
 
-  // const isDisabled = !image;
-
-  const colors = isColorsLoading
+  const colors = isLoadingData
     ? generatePlaceholderColors(PLACEHOLDER_COLORS_COUNT)
     : activeColors;
 
@@ -22,7 +19,7 @@ export function Colors() {
           key={`color-${index}`}
           index={index}
           color={color}
-          isDisabled={isColorsLoading}
+          isDisabled={isLoadingData}
         />
       ))}
     </div>
