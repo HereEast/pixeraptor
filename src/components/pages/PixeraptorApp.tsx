@@ -7,7 +7,7 @@ import {
 } from "~/context";
 
 import { PixelEditor } from "../PixelEditor";
-import { AboutSection } from "../AboutSection";
+import { GallerySection } from "../GallerySection";
 
 export function PixeraptorApp() {
   return (
@@ -20,7 +20,7 @@ export function PixeraptorApp() {
         </SettingsContextProvider>
       </CanvasContextProvider>
 
-      <AboutSection />
+      <GallerySection />
     </div>
   );
 }

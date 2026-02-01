@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from "./Canvas";
-import { Controls } from "./Controls";
+import { Controls } from "./controls/Controls";
 import { UploadImage } from "./UploadImage";
 import { DownloadPNGButton, DownloadSVGButton } from "./DownloadButtons";
 import { SavedCanvasList } from "./SavedCanvasList";
@@ -44,7 +44,9 @@ export function PixelEditor() {
           </div>
 
           {/* 2 */}
-          <div className="md:mt-12">{image && <Controls />}</div>
+          <div className="md:mt-12">
+            <Controls />
+          </div>
         </div>
 
         {/* Saved List */}

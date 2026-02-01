@@ -27,6 +27,10 @@ input[type="color"] {
   height: 100%;
 }
 
+input[type="color"]:disabled {
+  cursor: default;
+}
+
 input[type="color"]::-webkit-color-swatch-wrapper {
   padding: 0;
   border: none;
@@ -57,8 +61,15 @@ input[type="range"]::-webkit-slider-thumb {
   transition: scale 0.1s ease-in-out;
 }
 
-input[type="range"]::-webkit-slider-thumb:hover {
+input[type="range"]:disabled::-webkit-slider-thumb {
+  scale: 1;
+  background: var(--color-zinc-400);
+  cursor: default;
+}
+
+input[type="range"]:not(:disabled)::-webkit-slider-thumb:hover {
   scale: 1.2;
+  cursor: pointer;
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -70,6 +81,7 @@ input[type="range"]::-moz-range-thumb {
   transition: all 0.1s ease-in-out;
 }
 
-input[type="range"]::-moz-range-thumb:hover {
+input[type="range"]:not(:disabled)::-moz-range-thumb:hover {
   scale: 1.2;
+  cursor: pointer;
 }
