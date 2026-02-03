@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Button, ButtonLink } from "~/components/ui/Button";
 
+import { ButtonLink } from "~/components/ui/Button";
 import { Skeleton } from "~/components/ui/Skeleton";
 
 import { ABOUT_FEATURES, ROUTE } from "~/constants";
@@ -75,16 +75,14 @@ function Description() {
           </h2>
         </div>
 
-        <div>
-          <ul>
-            {ABOUT_FEATURES.map((feature, i) => (
-              <li key={i} className="flex items-start gap-2">
-                <span>[+]</span>
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul>
+          {ABOUT_FEATURES.map((feature, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span>[+]</span>
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
 
         <div>
           <ButtonLink href={ROUTE.PIXELATE} className="h-20 w-full">
