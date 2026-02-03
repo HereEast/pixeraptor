@@ -25,6 +25,7 @@ export const SAVED_CANVAS_LIMIT = 10;
 export const ROUTE = {
   HOME: "/",
   ABOUT: "/about",
+  PIXELATE: "/pixelate",
 };
 
 export const CONTACT = {
