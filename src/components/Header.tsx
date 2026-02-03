@@ -5,6 +5,10 @@ import { CONTACT, ROUTE } from "~/constants";
 
 const LINKS = [
   {
+    label: "Pixelate →",
+    href: ROUTE.PIXELATE,
+  },
+  {
     label: "About",
     href: ROUTE.ABOUT,
   },
